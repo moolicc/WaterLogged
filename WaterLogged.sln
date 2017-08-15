@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged", "WaterLogged\WaterLogged.csproj", "{4CFE636A-CBED-4D2C-B824-08946BD932DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterLogged.Serialization", "WaterLogged.Serialization\WaterLogged.Serialization.csproj", "{D2182D33-CBF5-4CFC-BC59-1DDCAE42910C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4CFE636A-CBED-4D2C-B824-08946BD932DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CFE636A-CBED-4D2C-B824-08946BD932DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CFE636A-CBED-4D2C-B824-08946BD932DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2182D33-CBF5-4CFC-BC59-1DDCAE42910C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2182D33-CBF5-4CFC-BC59-1DDCAE42910C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2182D33-CBF5-4CFC-BC59-1DDCAE42910C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2182D33-CBF5-4CFC-BC59-1DDCAE42910C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
