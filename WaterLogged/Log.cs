@@ -1,20 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace WaterLogged
 {
     public class Log
     {
+        public string Name { get; private set; }
         public bool Enabled { get; set; }
         public Formatter Formatter { get; set; }
         public Listener[] Listeners { get { return _listeners.Values.ToArray(); } }
+
         private Dictionary<string, Listener> _listeners;
 
+
         public Log()
+            : this(string.Format("log {0}", DateTime.Now.Ticks))
+        {
+        }
+
+        public Log(string name)
         {
             _listeners = new Dictionary<string, Listener>();
+            Name = name;
+            Enabled = true;
         }
 
         public void AddListener(Listener listener)
@@ -180,7 +191,7 @@ namespace WaterLogged
             {
                 foreach (var listenerKeyValue in _listeners)
                 {
-                    if (listenerKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) || listenerKeyValue.Value.TagFilter.Contains(tag)))
+                    if (listenerKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) || listenerKeyValue.Value.TagFilter.Contains(tag) || listenerKeyValue.Value.TagFilter.Length == 0))
                     {
                         listenerKeyValue.Value.Write(value, tag);
                     }

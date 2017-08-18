@@ -11,6 +11,12 @@ namespace WaterLogged
         public bool Enabled { get; set; }
         public string[] TagFilter { get; private set; }
 
+        public Listener()
+        {
+            Enabled = true;
+            TagFilter = new string[0];
+        }
+
         public void SetName(string newName)
         {
             if (Log != null)
