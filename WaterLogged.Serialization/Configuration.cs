@@ -22,12 +22,28 @@ namespace WaterLogged.Serialization
         
         public Formatter ResolveFormatter(string name)
         {
-            return null;
+            FormatterDefinition formatter = Formatters[name];
+            TypeCreator creator = new TypeCreator(formatter.Type);
+
+            foreach (var formatterProperty in formatter.Properties)
+            {
+                creator.MemberValues.Add(formatterProperty.Key, formatterProperty.Value);
+            }
+
+            return (Formatter)creator.Create();
         }
 
         public Listener ResolveListener(string name)
         {
-            return null;
+            ListenerDefinition listener = Listeners[name];
+            TypeCreator creator = new TypeCreator(listener.Type);
+
+            foreach (var formatterProperty in listener.Properties)
+            {
+                creator.MemberValues.Add(formatterProperty.Key, formatterProperty.Value);
+            }
+
+            return (Listener)creator.Create();
         }
 
         public Log ResolveLog(string name)
