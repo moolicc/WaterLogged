@@ -59,7 +59,9 @@ namespace WaterLogged.Serialization
         {
             string contents = System.IO.File.ReadAllText(filepath);
             string extension = System.IO.Path.GetExtension(filepath);
-            return CreateReader(extension).Read(contents);
+            var config = CreateReader(extension).Read(contents);
+            config.FilePath = filepath;
+            return config;
         }
 
         public abstract Configuration Read(string data);

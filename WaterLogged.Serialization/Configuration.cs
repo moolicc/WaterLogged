@@ -6,6 +6,7 @@ namespace WaterLogged.Serialization
 {
     public class Configuration
     {
+        public string FilePath { get; set; }
         public List<Configuration> Imports { get; private set; }
         public Dictionary<string, FormatterDefinition> Formatters { get; private set; }
         public Dictionary<string, ListenerDefinition> Listeners { get; private set; }

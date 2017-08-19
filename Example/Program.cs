@@ -12,14 +12,11 @@ namespace Example
             log.AddListener(new StandardOutListener());
             
             BasicFormatter form = new BasicFormatter();
+            form.Format = "${tag} ${message} ${datetime}";
             log.Formatter = form;
 
             log.WriteLineTag("test", "DEBUG");
 
-            Serializer s= new Serializer();
-            s.Logs.Add("mylog", log);
-            
-            Console.WriteLine(s.SaveJson());
             Console.ReadLine();
         }
     }
