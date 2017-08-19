@@ -111,6 +111,7 @@ namespace WaterLogged.Serialization.Xml
 
         private void ParseLogs()
         {
+            //TODO: Support listener/format declaration nested within a log's definition.
             var logElements = _rootElement.Elements("logs");
             foreach (var logElement in logElements)
             {
@@ -120,6 +121,14 @@ namespace WaterLogged.Serialization.Xml
                     if (attribute.Name == "name")
                     {
                         definition.Id = attribute.Value;
+                    }
+                    else if (attribute.Name == "formatter")
+                    {
+                        definition.FormatterName = attribute.Value;
+                    }
+                    else if (attribute.Name == "listeners")
+                    {
+                        definition.ListenerNames.AddRange(attribute.Value.Split('|'));
                     }
                     else
                     {
