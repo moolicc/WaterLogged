@@ -19,7 +19,7 @@ namespace WaterLogged.Serialization.StringConversion
             {
                 if (stringConverter.SupportsType(target))
                 {
-                    return stringConverter.Convert(input);
+                    return stringConverter.Convert(input, target);
                 }
             }
             throw new KeyNotFoundException("Failed to find a StringConverter for the specified target type.");
