@@ -106,6 +106,11 @@ namespace WaterLogged
             return CurrentAssembly.GetName().Name;
         }
 
+        public string GetAssemblyVersion(FormatData data)
+        {
+            return string.Format("{0}", CurrentAssembly.ImageRuntimeVersion)
+        }
+
         //Source: https://stackoverflow.com/a/1600990
         public string GetBuildDate(FormatData data)
         {
@@ -165,12 +170,12 @@ namespace WaterLogged
             throw new NotImplementedException("Waiting for me to implement this.");
         }
 
-        public bool GetNetworkConnected(FormatData data)
+        public string GetNetworkConnected(FormatData data)
         {
             throw new NotImplementedException("Waiting for me to implement this.");
         }
 
-        public bool GetInternetConnected(FormatData data)
+        public string GetInternetConnected(FormatData data)
         {
             throw new NotImplementedException("Waiting for me to implement this.");
         }

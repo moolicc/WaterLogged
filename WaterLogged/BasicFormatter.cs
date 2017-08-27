@@ -25,6 +25,25 @@ namespace WaterLogged
             Formatters.Add("log", d => d.Log.Name);
             Formatters.Add("datetime", d => string.Format("{0:" + d.Argument + "}", DateTime.Now));
             Formatters.Add("memory", _formatters.GetMemoryUsage);
+            Formatters.Add("cpu", _formatters.GetCpuUsage);
+            Formatters.Add("procname", _formatters.GetProcessName);
+            Formatters.Add("procdir", _formatters.GetProcessDir);
+            Formatters.Add("procid", _formatters.GetProcessId);
+            Formatters.Add("assembly", _formatters.GetAssemblyName);
+            Formatters.Add("version", _formatters.GetAssemblyVersion);
+            Formatters.Add("builddate", _formatters.GetAssemblyName);
+            Formatters.Add("assemblydir", _formatters.GetAssembly);
+            Formatters.Add("machine", _formatters.GetMachineName);
+            Formatters.Add("user", _formatters.GetUserName);
+            Formatters.Add("var", _formatters.GetEnvironmentVar);
+            Formatters.Add("os", _formatters.GetOS);
+            Formatters.Add("arch", _formatters.GetArchitecture);
+            Formatters.Add("reg", _formatters.GetRegistry);
+            Formatters.Add("network", _formatters.GetNetworkConnected);
+            Formatters.Add("internet", _formatters.GetInternetConnected);
+            Formatters.Add("os", _formatters.GetIpAddress);
+            Formatters.Add("host", _formatters.GetHostName);
+            Formatters.Add("counter", _formatters.GetCounter);
         }
 
         public BasicFormatter()
