@@ -5,22 +5,26 @@ using System.Text;
 
 namespace WaterLogged
 {
-    public delegate string Format(Log log, string message, string tag, string arg);
+    public delegate string Format(FormatData data);
 
     public class BasicFormatter : Formatter
     {
         public static Dictionary<string, Format> Formatters { get; private set; }
-        
+        private static Formatters _formatters;
+
         public string Format { get; set; }
         private int _index;
 
         static BasicFormatter()
         {
+            _formatters = new Formatters();
+
             Formatters = new Dictionary<string, Format>();
-            Formatters.Add("message", (l, m, t, a) => m);
-            Formatters.Add("tag", (l, m, t, a) => t);
-            Formatters.Add("log", (l, m, t, a) => l.Name);
-            Formatters.Add("datetime", (l, m, t, a) => string.Format("{0:" + a + "}", DateTime.Now));
+            Formatters.Add("message", d => d.Message);
+            Formatters.Add("tag", d => d.Tag);
+            Formatters.Add("log", d => d.Log.Name);
+            Formatters.Add("datetime", d => string.Format("{0:" + d.Argument + "}", DateTime.Now));
+            Formatters.Add("memory", _formatters.GetMemoryUsage);
         }
 
         public BasicFormatter()
@@ -71,7 +75,7 @@ namespace WaterLogged
                         {
                             throw new FormatException("Formatter '" + formatSpecifier + "' not found.");
                         }
-                        outputBuilder.Append(Formatters[formatSpecifier](log, input, tag, arg));
+                        outputBuilder.Append(Formatters[formatSpecifier](new FormatData(log, this, input, tag, arg)));
                         continue;
                     }
                 }
