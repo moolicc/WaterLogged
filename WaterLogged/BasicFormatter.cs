@@ -35,21 +35,27 @@ namespace WaterLogged
             _index = 0;
         }
 
-        public override string Transform(Log log, string input, string tag)
+        public override string Transform(Log log, string input, string tag, Dictionary<string, string> args)
         {
-            input = input.Trim();
+            //input = input.Trim();
             _index = 0;
             StringBuilder outputBuilder = new StringBuilder();
 
-            for (_index = 0; _index < Format.Length; _index++)
+            string format = Format;
+            if (args.ContainsKey("format"))
             {
-                if (Format[_index] == '$')
+                format = args["format"];
+            }
+
+            for (_index = 0; _index < format.Length; _index++)
+            {
+                if (format[_index] == '$')
                 {
-                    if (NextChar(Format) == '{')
+                    if (NextChar(format) == '{')
                     {
                         _index++;
                         _index++;
-                        string formatSpecifier = ReadPast(Format, '}', out var foundChar);
+                        string formatSpecifier = ReadPast(format, '}', out var foundChar);
                         string arg = "";
                         if (!foundChar)
                         {
@@ -69,7 +75,7 @@ namespace WaterLogged
                         continue;
                     }
                 }
-                outputBuilder.Append(Format[_index]);
+                outputBuilder.Append(format[_index]);
             }
 
             return outputBuilder.ToString();

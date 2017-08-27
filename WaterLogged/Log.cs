@@ -182,9 +182,10 @@ namespace WaterLogged
                 return;
             }
 
+            string formattedValue = value;
             if (Formatter != null)
             {
-                value = Formatter.Transform(this, value, tag);
+                formattedValue = Formatter.Transform(this, value, tag, new Dictionary<string, string>());
             }
 
             lock (_listeners)
@@ -193,7 +194,15 @@ namespace WaterLogged
                 {
                     if (listenerKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) || listenerKeyValue.Value.TagFilter.Contains(tag) || listenerKeyValue.Value.TagFilter.Length == 0))
                     {
-                        listenerKeyValue.Value.Write(value, tag);
+                        if (listenerKeyValue.Value.FormatterArgs.Count > 0)
+                        {
+                            if (Formatter != null)
+                            {
+                                listenerKeyValue.Value.Write(Formatter.Transform(this, value, tag, listenerKeyValue.Value.FormatterArgs), tag);
+                                continue;
+                            }
+                        }
+                        listenerKeyValue.Value.Write(formattedValue, tag);
                     }
                 }
             }

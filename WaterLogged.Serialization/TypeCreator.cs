@@ -20,6 +20,10 @@ namespace WaterLogged.Serialization
 
         public object Create()
         {
+            //TODO: Support for method calling
+            //TODO: Support for non-default ctor usage
+            //TODO: Support for Lists and Dictionaries
+
             Type type = null;
             object value = null;
 

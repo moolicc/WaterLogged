@@ -21,6 +21,7 @@ namespace WaterLogged.Serialization.StringConversion
             {
                 return TimeSpan.Parse(input);
             }
+            return null;
         }
     }
 }

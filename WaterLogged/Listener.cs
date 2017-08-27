@@ -10,11 +10,13 @@ namespace WaterLogged
         public string Name { get; internal set; }
         public bool Enabled { get; set; }
         public string[] TagFilter { get; private set; }
+        public Dictionary<string, string> FormatterArgs { get; private set; }
 
         public Listener()
         {
             Enabled = true;
             TagFilter = new string[0];
+            FormatterArgs = new Dictionary<string, string>();
         }
 
         public void SetName(string newName)
@@ -26,7 +28,7 @@ namespace WaterLogged
             }
         }
 
-        public virtual  void SetTagFilter(string[] tagFilter)
+        public virtual void SetTagFilter(string[] tagFilter)
         {
             TagFilter = tagFilter;
         }
