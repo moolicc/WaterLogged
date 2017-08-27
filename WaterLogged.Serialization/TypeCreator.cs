@@ -22,7 +22,7 @@ namespace WaterLogged.Serialization
         {
             //TODO: Support for method calling
             //TODO: Support for non-default ctor usage
-            //TODO: Support for Lists and Dictionaries
+            //TODO: Support for Dictionaries
 
             Type type = null;
             object value = null;
@@ -39,24 +39,87 @@ namespace WaterLogged.Serialization
 
             var properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public);
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic);
+            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public);
 
             foreach (var memberValue in MemberValues)
             {
-                var property = properties.FirstOrDefault(p => p.Name == memberValue.Key);
+                var property = properties.FirstOrDefault(p => string.Equals(p.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
                 if (property != null)
                 {
-                    property.SetValue(value,
-                        StringConversion.Converter.Convert(memberValue.Value, property.PropertyType));
+                    if (property.PropertyType == typeof(List<string>))
+                    {
+                        List<string> propValue = (List<string>) property.GetValue(value);
+                        propValue.AddRange(memberValue.Value.Split('|'));
+                    }
+                    else if (property.PropertyType == typeof(string[]))
+                    {
+                        property.SetValue(value, memberValue.Value.Split('|'));
+                    }
+                    else
+                    {
+                        property.SetValue(value,
+                            StringConversion.Converter.Convert(memberValue.Value, property.PropertyType));
+                    }
                     continue;
                 }
-                var field = fields.FirstOrDefault(f => f.Name == memberValue.Key);
+                var field = fields.FirstOrDefault(f => string.Equals(f.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
                 if (field != null)
                 {
-                    field.SetValue(value, StringConversion.Converter.Convert(memberValue.Value, field.FieldType));
+                    if (field.FieldType == typeof(List<string>))
+                    {
+                        List<string> fieldValue = (List<string>)field.GetValue(value);
+                        fieldValue.AddRange(memberValue.Value.Split('|'));
+                    }
+                    else if (field.FieldType == typeof(string[]))
+                    {
+                        field.SetValue(value, memberValue.Value.Split('|'));
+                    }
+                    else
+                    {
+                        field.SetValue(value,
+                            StringConversion.Converter.Convert(memberValue.Value, field.FieldType));
+                    }
                     continue;
+                }
+
+                var method =
+                    methods.FirstOrDefault(
+                        m => string.Equals(m.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
+                if (method != null)
+                {
+                    var methodParams = method.GetParameters();
+                    List<object> parameters = new List<object>();
+                    string[] parts = new string[1] { memberValue.Value };
+                    Dictionary<string, string> parameterMap = new Dictionary<string, string>();
+
+                    if (memberValue.Value.Contains(","))
+                    {
+                        parts = memberValue.Value.Split(',');
+                    }
+
+                    foreach (var part in parts)
+                    {
+                        if (part.Contains(":"))
+                        {
+                            var keyvalue = part.Split(':');
+                            parameterMap.Add(keyvalue[0], keyvalue[1]);
+                        }
+                    }
+
+                    foreach (var param in methodParams)
+                    {
+                        if (!parameterMap.ContainsKey(param.Name))
+                        {
+                            throw new KeyNotFoundException("Parameter mismatch.");
+                        }
+                        parameters.Add(StringConversion.Converter.Convert(parameterMap[param.Name], param.ParameterType));
+                    }
+
+                    method.Invoke(value, parameters.ToArray());
                 }
                 throw new KeyNotFoundException(string.Format("Member '{0}' not found for type '{1}'.", memberValue.Key, TypeName));
             }
+
             return value;
         }
     }

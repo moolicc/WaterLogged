@@ -9,7 +9,7 @@ namespace WaterLogged
         public Log Log { get; internal set; }
         public string Name { get; internal set; }
         public bool Enabled { get; set; }
-        public string[] TagFilter { get; private set; }
+        public string[] TagFilter { get; set; }
         public Dictionary<string, string> FormatterArgs { get; private set; }
 
         public Listener()
@@ -26,11 +26,6 @@ namespace WaterLogged
                 Log.ChangeListenerName(Name, newName);
                 Name = newName;
             }
-        }
-
-        public virtual void SetTagFilter(string[] tagFilter)
-        {
-            TagFilter = tagFilter;
         }
 
         public virtual void Write(string value, string tag)

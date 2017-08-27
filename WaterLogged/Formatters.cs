@@ -108,7 +108,7 @@ namespace WaterLogged
 
         public string GetAssemblyVersion(FormatData data)
         {
-            return string.Format("{0}", CurrentAssembly.ImageRuntimeVersion)
+            return string.Format("{0}", CurrentAssembly.ImageRuntimeVersion);
         }
 
         //Source: https://stackoverflow.com/a/1600990
@@ -127,10 +127,10 @@ namespace WaterLogged
             var secondsSince1970 = BitConverter.ToInt32(buffer, offset + c_LinkerTimestampOffset);
             var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
-            var linkTimeUtc = epoch.AddSeconds(secondsSince1970);
+            var linkTimeUtc = epoch.AddSeconds(-secondsSince1970);
 
             var tz = TimeZoneInfo.Local;
-            var localTime = TimeZoneInfo.ConvertTime(linkTimeUtc, tz);
+            var localTime = TimeZoneInfo.ConvertTime(linkTimeUtc, TimeZoneInfo.Utc, TimeZoneInfo.Local);
 
             return string.Format("{0:" + data.Argument + "}", localTime);
         }

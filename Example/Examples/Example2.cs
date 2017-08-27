@@ -18,7 +18,7 @@ namespace Example.Examples
             listener.BackColorMap.Add("info", ConsoleColor.Yellow);
             listener.BackColorMap.Add("error", ConsoleColor.Red);
             _log.AddListener(listener);
-            _log.Formatter = new BasicFormatter("[${datetime}] [${tag}] ${message}");
+            _log.Formatter = new BasicFormatter("[${datetime}] [${tag}] [${builddate}] ${message}");
         }
 
         public override void Echo(string text)
