@@ -9,7 +9,14 @@ namespace WaterLogged.Serialization.StringConversion
 
         static Converter()
         {
-            Converters = new List<IStringConverter>();
+            Converters = new List<IStringConverter>
+            {
+                new ArrayConverter(),
+                new BoolConverter(),
+                new DateTimeConverter(),
+                new NumericConverters(),
+                new StringConverter()
+            };
         }
 
         public static object Convert(string input, Type target)
