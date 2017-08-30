@@ -14,6 +14,16 @@ namespace WaterLogged.Listeners
             BackColorMap = new Dictionary<string, ConsoleColor>();
         }
 
+        public void MapForeColor(string tag, ConsoleColor color)
+        {
+            ForeColorMap.Add(tag, color);
+        }
+
+        public void MapBackColor(string tag, ConsoleColor color)
+        {
+            BackColorMap.Add(tag, color);
+        }
+
         public override void Write(string value, string tag)
         {
             var curForeColor = Console.ForegroundColor;

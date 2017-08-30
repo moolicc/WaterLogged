@@ -111,7 +111,6 @@ namespace WaterLogged.Serialization.Xml
 
         private void ParseLogs()
         {
-            //TODO: Support listener/format declaration nested within a log's definition.
             var logElements = _rootElement.Elements("logs");
             foreach (var logElement in logElements)
             {

@@ -20,7 +20,6 @@ namespace WaterLogged.Serialization
 
         public object Create()
         {
-            //TODO: Support for method calling
             //TODO: Support for non-default ctor usage
             //TODO: Support for Dictionaries
 
@@ -46,14 +45,14 @@ namespace WaterLogged.Serialization
                 var property = properties.FirstOrDefault(p => string.Equals(p.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
                 if (property != null)
                 {
-                    if (property.PropertyType == typeof(List<string>))
+                    if (property.PropertyType == typeof(List<object>))
                     {
-                        List<string> propValue = (List<string>) property.GetValue(value);
-                        propValue.AddRange(memberValue.Value.Split('|'));
+                        List<object> propValue = (List<object>) property.GetValue(value);
+                        propValue.AddRange(memberValue.Value.Split('|').Select(s => StringConversion.Converter.Convert(s, property.PropertyType.GenericTypeArguments[0])));
                     }
-                    else if (property.PropertyType == typeof(string[]))
+                    else if (property.PropertyType == typeof(object[]))
                     {
-                        property.SetValue(value, memberValue.Value.Split('|'));
+                        property.SetValue(value, memberValue.Value.Split('|').Select(s => StringConversion.Converter.Convert(s, property.PropertyType.GenericTypeArguments[0])));
                     }
                     else
                     {
@@ -65,14 +64,14 @@ namespace WaterLogged.Serialization
                 var field = fields.FirstOrDefault(f => string.Equals(f.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
                 if (field != null)
                 {
-                    if (field.FieldType == typeof(List<string>))
+                    if (field.FieldType == typeof(List<object>))
                     {
-                        List<string> fieldValue = (List<string>)field.GetValue(value);
-                        fieldValue.AddRange(memberValue.Value.Split('|'));
+                        List<object> fieldValue = (List<object>)field.GetValue(value);
+                        fieldValue.AddRange(memberValue.Value.Split('|').Select(s => StringConversion.Converter.Convert(s, field.FieldType.GenericTypeArguments[0])));
                     }
-                    else if (field.FieldType == typeof(string[]))
+                    else if (field.FieldType == typeof(object[]))
                     {
-                        field.SetValue(value, memberValue.Value.Split('|'));
+                        field.SetValue(value, memberValue.Value.Split('|').Select(s => StringConversion.Converter.Convert(s, field.FieldType.GenericTypeArguments[0])));
                     }
                     else
                     {
