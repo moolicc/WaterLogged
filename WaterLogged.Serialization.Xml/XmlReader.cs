@@ -25,9 +25,11 @@ namespace WaterLogged.Serialization.Xml
             ParseImports();
             ParseFormatters();
             ParseListeners();
+            ParseLogs();
 
             return Configuration;
         }
+
 
         private void ParseImports()
         {
@@ -44,32 +46,7 @@ namespace WaterLogged.Serialization.Xml
             var formatterElements = _rootElement.Elements("formatter");
             foreach (var formatterElement in formatterElements)
             {
-                var definition = new FormatterDefinition();
-                foreach (var attribute in formatterElement.Attributes())
-                {
-                    if (attribute.Name == "type")
-                    {
-                        definition.Type = attribute.Value;
-                    }
-                    else if (attribute.Name == "name")
-                    {
-                        definition.Id = attribute.Value;
-                    }
-                    else
-                    {
-                        definition.Properties.Add(attribute.Name.ToString(), attribute.Value);
-                    }
-                }
-                if (string.IsNullOrWhiteSpace(definition.Type) || string.IsNullOrWhiteSpace(definition.Id))
-                {
-                    throw new ConfigReadException(
-                        "Formatter is missing a necessary attribute in the configuration. Make sure 'name' and 'type' exist as attributes.");
-                }
-                foreach (var subElement in formatterElement.Elements())
-                {
-                    var paramArray = GetParameterArray(subElement);
-                    definition.Properties.Add(paramArray.Item1, paramArray.Item2);
-                }
+                var definition = ParseFormatter(formatterElement);
                 Configuration.Formatters.Add(definition.Id, definition);
             }
         }
@@ -79,71 +56,135 @@ namespace WaterLogged.Serialization.Xml
             var listenerElements = _rootElement.Elements("listener");
             foreach (var listenerElement in listenerElements)
             {
-                var definition = new ListenerDefinition();
-                foreach (var attribute in listenerElement.Attributes())
-                {
-                    if (attribute.Name == "type")
-                    {
-                        definition.Type = attribute.Value;
-                    }
-                    else if (attribute.Name == "name")
-                    {
-                        definition.Id = attribute.Value;
-                    }
-                    else
-                    {
-                        definition.Properties.Add(attribute.Name.ToString(), attribute.Value);
-                    }
-                }
-                if (string.IsNullOrWhiteSpace(definition.Type) || string.IsNullOrWhiteSpace(definition.Id))
-                {
-                    throw new ConfigReadException(
-                        "Listener is missing a necessary attribute in the configuration. Make sure 'name' and 'type' exist as attributes.");
-                }
-                foreach (var subElement in listenerElement.Elements())
-                {
-                    var paramArray = GetParameterArray(subElement);
-                    definition.Properties.Add(paramArray.Item1, paramArray.Item2);
-                }
+                var definition = ParseListener(listenerElement);
                 Configuration.Listeners.Add(definition.Id, definition);
             }
         }
-
+        
         private void ParseLogs()
         {
             var logElements = _rootElement.Elements("logs");
             foreach (var logElement in logElements)
             {
-                var definition = new LogDefinition();
-                foreach (var attribute in logElement.Attributes())
-                {
-                    if (attribute.Name == "name")
-                    {
-                        definition.Id = attribute.Value;
-                    }
-                    else if (attribute.Name == "formatter")
-                    {
-                        definition.FormatterName = attribute.Value;
-                    }
-                    else if (attribute.Name == "listeners")
-                    {
-                        definition.ListenerNames.AddRange(attribute.Value.Split('|'));
-                    }
-                    else
-                    {
-                        definition.Properties.Add(attribute.Name.ToString(), attribute.Value);
-                    }
-                }
-                foreach (var subElement in logElement.Elements())
-                {
-                    var paramArray = GetParameterArray(subElement);
-                    definition.Properties.Add(paramArray.Item1, paramArray.Item2);
-                }
+                var definition = ParseLog(logElement);
                 Configuration.Logs.Add(definition.Id, definition);
             }
         }
 
-        public (string, string) GetParameterArray(XElement parent)
+
+        private ListenerDefinition ParseListener(XElement element)
+        {
+            return ParseDefinition(new ListenerDefinition(), element);
+        }
+
+        private FormatterDefinition ParseFormatter(XElement element)
+        {
+            return ParseDefinition(new FormatterDefinition(), element);
+        }
+
+        private LogDefinition ParseLog(XElement element)
+        {
+            var definition = new LogDefinition();
+            foreach (var attribute in element.Attributes())
+            {
+                if (attribute.Name == "name")
+                {
+                    definition.Id = attribute.Value;
+                }
+                else
+                {
+                    definition.Properties.Add(attribute.Name.ToString(), attribute.Value);
+                }
+            }
+            foreach (var subElement in element.Elements())
+            {
+                if (subElement.Name.ToString().Equals("listener", StringComparison.OrdinalIgnoreCase))
+                {
+                    var refInfo = subElement.GetAttribute("ref");
+                    string name = GetTempListenerName();
+
+                    if (refInfo.Item1)
+                    {
+                        name = refInfo.Item2.Value;
+                    }
+                    else
+                    {
+                        var listenerDefinition = ParseListener(subElement);
+                        listenerDefinition.Id = name;
+                        Configuration.Listeners.Add(name, listenerDefinition);
+                    }
+
+                    definition.ListenerNames.Add(name);
+                    continue;
+                }
+                if (subElement.Name.ToString().Equals("formatter", StringComparison.OrdinalIgnoreCase))
+                {
+                    var refInfo = subElement.GetAttribute("ref");
+                    string name = GetTempFormatterName();
+
+                    if (refInfo.Item1)
+                    {
+                        name = refInfo.Item2.Value;
+                    }
+                    else
+                    {
+                        var formatterDefinition = ParseFormatter(subElement);
+                        formatterDefinition.Id = name;
+                        Configuration.Formatters.Add(name, formatterDefinition);
+                    }
+
+                    definition.FormatterName = name;
+                    continue;
+                }
+                var paramArray = GetParameterArray(subElement);
+                definition.Properties.Add(paramArray.Item1, paramArray.Item2);
+            }
+            return definition;
+        }
+
+        private T ParseDefinition<T>(T definitionBase, XElement element) where T : Definition
+        {
+            foreach (var attribute in element.Attributes())
+            {
+                if (attribute.Name == "type")
+                {
+                    definitionBase.Type = attribute.Value;
+                }
+                else if (attribute.Name == "name")
+                {
+                    definitionBase.Id = attribute.Value;
+                }
+                else
+                {
+                    definitionBase.Properties.Add(attribute.Name.ToString(), attribute.Value);
+                }
+            }
+            if (string.IsNullOrWhiteSpace(definitionBase.Type) || string.IsNullOrWhiteSpace(definitionBase.Id))
+            {
+                throw new ConfigReadException(
+                    definitionBase.DefinitionType.ToString() + " is missing a necessary attribute in the configuration. Make sure 'name' and 'type' exist as attributes.");
+            }
+            foreach (var subElement in element.Elements())
+            {
+                var paramArray = GetParameterArray(subElement);
+                definitionBase.Properties.Add(paramArray.Item1, paramArray.Item2);
+            }
+            return definitionBase;
+        }
+
+
+        private string GetTempListenerName()
+        {
+            return string.Format("listener{0}", DateTime.Now.Ticks);
+        }
+
+        private string GetTempFormatterName()
+        {
+            return string.Format("formatter{0}", DateTime.Now.Ticks);
+        }
+        
+
+        private (string, string) GetParameterArray(XElement parent)
         {
             StringBuilder builder = new StringBuilder();
             foreach (var itemElement in parent.Elements())
