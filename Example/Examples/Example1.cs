@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WaterLogged;
-
+﻿
 namespace Example.Examples
 {
     class Example1 : ExampleBase

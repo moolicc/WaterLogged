@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WaterLogged;
+﻿using WaterLogged;
 
 namespace Example
 {
