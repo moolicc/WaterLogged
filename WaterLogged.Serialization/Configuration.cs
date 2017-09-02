@@ -10,6 +10,46 @@ namespace WaterLogged.Serialization
         public Dictionary<string, ListenerDefinition> Listeners { get; private set; }
         public Dictionary<string, LogDefinition> Logs { get; private set; }
 
+        public static Configuration FromLogs(Log[] logs)
+        {
+            var config = new Configuration();
+            foreach (var log in logs)
+            {
+                var logDefinition = GetLogDefinition(log);
+
+                foreach (var logListener in log.Listeners)
+                {
+                    var listenerDefinition = GetListenerDefinition(logListener);
+                    logDefinition.ListenerNames.Add(listenerDefinition.Id);
+                    config.Listeners.Add(listenerDefinition.Id, listenerDefinition);
+                }
+                var formatterDefinition = GetFormatterDefinition(log.Formatter);
+                config.Formatters.Add(formatterDefinition.Id, formatterDefinition);
+                logDefinition.FormatterName = formatterDefinition.Id;
+
+                config.Logs.Add(logDefinition.Id, logDefinition);
+            }
+            return config;
+        }
+
+        private static LogDefinition GetLogDefinition(Log log)
+        {
+            var definition = new LogDefinition();
+            definition.Id = log.Name;
+            definition.Type = log.GetType().AssemblyQualifiedName;
+            return null;
+        }
+        
+        private static FormatterDefinition GetFormatterDefinition(Formatter formatter)
+        {
+            return null;
+        }
+
+        private static ListenerDefinition GetListenerDefinition(Listener listener)
+        {
+            return null;
+        }
+
         public Configuration()
         {
             Imports = new List<Configuration>();
