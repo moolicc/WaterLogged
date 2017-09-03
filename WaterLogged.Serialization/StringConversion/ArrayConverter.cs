@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace WaterLogged.Serialization.StringConversion
 {
@@ -23,6 +25,20 @@ namespace WaterLogged.Serialization.StringConversion
                 return list.ToArray();
             }
             return null;
+        }
+
+        public string Convert(object input)
+        {
+            var array = (object[]) input;
+            StringBuilder builder = new StringBuilder();
+
+            foreach (var item in array)
+            {
+                builder.Append(Converter.Convert(item));
+                builder.Append('|');
+            }
+
+            return builder.ToString().TrimEnd('|');
         }
     }
 }

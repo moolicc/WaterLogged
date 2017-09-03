@@ -30,5 +30,17 @@ namespace WaterLogged.Serialization.StringConversion
             }
             throw new KeyNotFoundException("Failed to find a StringConverter for the specified target type.");
         }
+
+        public static string Convert(object input)
+        {
+            foreach (var stringConverter in Converters)
+            {
+                if (stringConverter.SupportsType(input.GetType()))
+                {
+                    return stringConverter.Convert(input);
+                }
+            }
+            throw new KeyNotFoundException("Failed to find a StringConverter for the specified type.");
+        }
     }
 }

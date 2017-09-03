@@ -25,5 +25,10 @@ namespace WaterLogged.Serialization.StringConversion
             }
             return null;
         }
+
+        public string Convert(object input)
+        {
+            return input.ToString();
+        }
     }
 }

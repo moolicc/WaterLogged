@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 
 namespace WaterLogged.Serialization
 {
@@ -37,17 +40,46 @@ namespace WaterLogged.Serialization
             var definition = new LogDefinition();
             definition.Id = log.Name;
             definition.Type = log.GetType().AssemblyQualifiedName;
-            return null;
+            LoadPropertyValues(definition, log);
+            return definition;
         }
         
         private static FormatterDefinition GetFormatterDefinition(Formatter formatter)
         {
-            return null;
+            var definition = new FormatterDefinition();
+            definition.Id = string.Format("formatter{0}", DateTime.Now.Ticks);
+            definition.Type = formatter.GetType().AssemblyQualifiedName;
+            LoadPropertyValues(definition, formatter);
+            return definition;
         }
 
         private static ListenerDefinition GetListenerDefinition(Listener listener)
         {
-            return null;
+            var definition = new ListenerDefinition();
+            definition.Id = string.Format("listener{0}", DateTime.Now.Ticks);
+            definition.Type = listener.GetType().AssemblyQualifiedName;
+            LoadPropertyValues(definition, listener);
+            return definition;
+        }
+
+        private static void LoadPropertyValues(Definition definition, object value)
+        {
+            Type type = value.GetType();
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.NonPublic);
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic);
+
+            foreach (var property in properties)
+            {
+                if (!property.CanWrite)
+                {
+                    continue;
+                }
+                definition.Properties.Add(property.Name, StringConversion.Converter.Convert(property.GetValue(value)));
+            }
+            foreach (var field in fields)
+            {
+                definition.Properties.Add(field.Name, StringConversion.Converter.Convert(field.GetValue(value)));
+            }
         }
 
         public Configuration()

@@ -6,5 +6,6 @@ namespace WaterLogged.Serialization.StringConversion
     {
         bool SupportsType(Type type);
         object Convert(string input, Type type);
+        string Convert(object input);
     }
 }
