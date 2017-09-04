@@ -9,14 +9,14 @@ namespace WaterLogged
     public class BasicFormatter : Formatter
     {
         public static Dictionary<string, Format> Formatters { get; private set; }
-        private static Formatters _formatters;
+        private static BasicFormatters _formatters;
 
         public string Format { get; set; }
         private int _index;
 
         static BasicFormatter()
         {
-            _formatters = new Formatters();
+            _formatters = new BasicFormatters();
 
             Formatters = new Dictionary<string, Format>();
             Formatters.Add("message", d => d.Message);

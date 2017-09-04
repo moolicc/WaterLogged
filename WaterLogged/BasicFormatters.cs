@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 
 namespace WaterLogged
 {
-    public class Formatters
+    public class BasicFormatters
     {
         public Process CurrentProcess { get; private set; }
         public Assembly CurrentAssembly { get; private set; }
@@ -20,7 +20,7 @@ namespace WaterLogged
         //Thread info
         //NewLine
 
-        public Formatters()
+        public BasicFormatters()
         {
             CurrentProcess = Process.GetCurrentProcess();
             CurrentAssembly = Assembly.GetEntryAssembly();
