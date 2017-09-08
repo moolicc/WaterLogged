@@ -4,9 +4,7 @@ using System.Text;
 
 namespace WaterLogged.Logic.Parsing.Tokens
 {
-    public class Token
+    public class TextDataToken : Token
     {
-        public int Index { get; set; }
-        public string Text { get; set; }
     }
 }
