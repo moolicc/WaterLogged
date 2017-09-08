@@ -8,5 +8,12 @@ namespace WaterLogged.Logic.Parsing.Tokens
     {
         public int Index { get; set; }
         public string Text { get; set; }
+
+        public Token Init(int index, string text)
+        {
+            Index = Index;
+            Text = Text;
+            return this;
+        }
     }
 }
