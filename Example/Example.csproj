@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\WaterLogged.Logic\WaterLogged.Logic.csproj" />
     <ProjectReference Include="..\WaterLogged.Serialization\WaterLogged.Serialization.csproj" />
     <ProjectReference Include="..\WaterLogged\WaterLogged.csproj" />
   </ItemGroup>

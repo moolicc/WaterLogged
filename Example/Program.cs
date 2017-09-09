@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Example.Examples;
-using WaterLogged;
-using WaterLogged.Listeners;
-using WaterLogged.Serialization;
+using WaterLogged.Logic.Parsing;
 
 namespace Example
 {
@@ -18,8 +16,16 @@ namespace Example
             _examples.Add(new Example1());
             _examples.Add(new Example2());
 
+
+            Tokenizer t = new Tokenizer();
+            foreach (var tok in t.EvaluateTokens("Hello, World! #{1 + 1} ${interpolate:%{me},%{you}}"))
+            {
+                Console.WriteLine("{0}", tok);
+            }
+
+
             _selectedExample = -1;
-            SelectExample();
+            //SelectExample();
 
             Console.WriteLine("Press the ANY key to continue...");
             Console.ReadLine();
