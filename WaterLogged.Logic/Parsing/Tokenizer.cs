@@ -43,9 +43,17 @@ namespace WaterLogged.Logic.Parsing
                 {
                     tokens.Add(new LiteralToken().Init(_index, "%"));
                 }
+                else if (curChar == ',')
+                {
+                    tokens.Add(new CommaToken().Init(_index, ","));
+                }
+                else if (curChar == ':')
+                {
+                    tokens.Add(new ColonToken().Init(_index, ":"));
+                }
                 else
                 {
-                    tokens.Add(new TextDataToken().Init(_index, ReadUntil(expression, '\n', '{', '}', '#', '$', '%')));
+                    tokens.Add(new TextDataToken().Init(_index, ReadUntil(expression, '\n', '{', '}', '#', '$', '%', ',', ':')));
                 }
             }
             return tokens.ToArray();
@@ -64,6 +72,7 @@ namespace WaterLogged.Logic.Parsing
                     break;
                 }
                 builder.Append(curChar);
+                _index++;
             }
 
             return builder.ToString();
