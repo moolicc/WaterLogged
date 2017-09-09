@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WaterLogged.Logic.Parsing.Tokens
 {
-    public class LogicalToken : FormatterToken
+    public class FormatterToken : Token
     {
     }
 }
