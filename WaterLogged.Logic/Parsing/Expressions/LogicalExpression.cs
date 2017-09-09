@@ -6,16 +6,16 @@ namespace WaterLogged.Logic.Parsing.Expressions
 {
     public class LogicalExpression : IExpression
     {
-        public string Expression { get; set; }
+        public IExpression NestedExpression { get; set; }
 
-        public LogicalExpression(string expression)
+        public LogicalExpression(IExpression expression)
         {
-            Expression = expression;
+            NestedExpression = expression;
         }
 
         public string Eval(Evaluator evaluator)
         {
-            return new NCalc.Expression(Expression).Evaluate().ToString();
+            return new NCalc.Expression(NestedExpression.Eval(evaluator)).Evaluate().ToString();
         }
     }
 }
