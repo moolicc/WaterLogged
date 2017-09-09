@@ -8,7 +8,6 @@ namespace WaterLogged.Logic.Parsing
 {
     public class Tokenizer
     {
-        private string _expression;
         private int _index;
 
         //$ means interpret as method
