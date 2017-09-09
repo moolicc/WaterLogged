@@ -45,7 +45,7 @@ namespace WaterLogged.Logic.Parsing
                 }
                 else
                 {
-                    tokens.Add(new TextDataToken().Init(_index, ReadUntil(expression, ' ', '\n', '{', '}', '#', '$', '%')));
+                    tokens.Add(new TextDataToken().Init(_index, ReadUntil(expression, '\n', '{', '}', '#', '$', '%')));
                 }
             }
             return tokens.ToArray();

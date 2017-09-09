@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WaterLogged.Logic.Parsing
 {
-    class Parser
+    public class Parser
     {
     }
 }
