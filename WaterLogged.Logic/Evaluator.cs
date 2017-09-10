@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WaterLogged.Logic.Parsing
+namespace WaterLogged.Parsing
 {
     public class Evaluator
     {

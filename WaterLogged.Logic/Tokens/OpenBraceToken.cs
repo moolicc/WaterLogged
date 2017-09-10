@@ -1,4 +1,4 @@
-﻿namespace WaterLogged.Logic.Parsing.Tokens
+﻿namespace WaterLogged.Parsing.Tokens
 {
     public class OpenBraceToken : Token
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace WaterLogged.Logic.Parsing.Expressions
+namespace WaterLogged.Parsing.Expressions
 {
     public class InterpolateExpression : IExpression
     {

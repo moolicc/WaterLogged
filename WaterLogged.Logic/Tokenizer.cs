@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WaterLogged.Logic.Parsing.Tokens;
+using WaterLogged.Parsing.Tokens;
 
-namespace WaterLogged.Logic.Parsing
+namespace WaterLogged.Parsing
 {
     public class Tokenizer
     {

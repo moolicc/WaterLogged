@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WaterLogged.Logic.Parsing.Expressions
+namespace WaterLogged.Parsing.Expressions
 {
     public class ComboExpression : IExpression
     {

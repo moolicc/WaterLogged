@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WaterLogged.Logic.Parsing.Tokens
+namespace WaterLogged.Parsing.Tokens
 {
-    public class ColonToken : Token
+    public class TextDataToken : Token
     {
     }
 }

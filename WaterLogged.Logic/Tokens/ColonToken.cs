@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WaterLogged.Logic.Parsing.Tokens
+namespace WaterLogged.Parsing.Tokens
 {
-    public class EndOfTextToken : Token
+    public class ColonToken : Token
     {
     }
 }
