@@ -9,8 +9,6 @@ namespace WaterLogged.Logic.Parsing
 {
     public class Parser
     {
-        private const int IDLE_LOOP_FAIL_COUNT = 20;
-
         public string Source { get; private set; }
         public Tokenizer Tokenizer { get; private set; }
 
