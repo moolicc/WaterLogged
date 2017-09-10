@@ -15,7 +15,7 @@ namespace WaterLogged.Parsing
             Functions = new Dictionary<string, Delegate>();
         }
 
-        public object GetVariable(string name)
+        public virtual object GetVariable(string name)
         {
             if (!Variables.ContainsKey(name))
             {
@@ -24,7 +24,7 @@ namespace WaterLogged.Parsing
             return Variables[name];
         }
 
-        public Delegate GetDelegate(string name)
+        public virtual Delegate GetDelegate(string name)
         {
             if (!Functions.ContainsKey(name))
             {
