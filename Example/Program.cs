@@ -23,6 +23,13 @@ namespace Example
                 Console.WriteLine("{0}", tok);
             }
 
+            Parser p = new Parser("${var:param1,param2,#{2 + 3 + ${myvar}},}");
+            var expressions = p.Parse();
+            foreach (var expression in expressions)
+            {
+                Console.WriteLine("[{0}]", expression);
+            }
+
 
             _selectedExample = -1;
             //SelectExample();
