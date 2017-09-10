@@ -17,18 +17,10 @@ namespace Example
             _examples.Add(new Example2());
 
 
-            Tokenizer t = new Tokenizer();
-            foreach (var tok in t.EvaluateTokens("Hello, World! #{1 + 1} ${interpolate:%{me},%{you}}"))
-            {
-                Console.WriteLine("{0}", tok);
-            }
 
-            Parser p = new Parser("${var:param1,param2,#{2 + 3 + ${myvar}},}");
-            var expressions = p.Parse();
-            foreach (var expression in expressions)
-            {
-                Console.WriteLine("[{0}]", expression);
-            }
+            WaterLogged.Logic.Parsing.Evaluator e = new Evaluator("#{1 - 1 == -1 + 1}");
+            Console.WriteLine(e.Eval());
+
 
 
             _selectedExample = -1;
