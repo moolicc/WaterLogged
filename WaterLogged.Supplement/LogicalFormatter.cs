@@ -123,6 +123,12 @@ namespace WaterLogged.Supplement
             BaseContext.Functions.Add("right", new Func<string, int, string>((s1, index) => s1.Substring(index)));
             BaseContext.Functions.Add("left", new Func<string, int, string>((s1, index) => s1.Substring(0, index)));
             BaseContext.Functions.Add("mid", new Func<string, int, int, string>((s1, index, index2) => s1.Substring(index, index2 - index + 1)));
+            BaseContext.Functions.Add("upper", new Func<string, string>(s1 => s1.ToUpper()));
+            BaseContext.Functions.Add("lower", new Func<string, string>(s1 => s1.ToLower()));
+            BaseContext.Functions.Add("hasvalue", new Func<string, bool>(s => !string.IsNullOrEmpty(s)));
+            BaseContext.Functions.Add("trim", new Func<string, string>(s1 => s1.Trim()));
+            BaseContext.Functions.Add("trimend", new Func<string, string>(s1 => s1.TrimEnd()));
+            BaseContext.Functions.Add("trimstart", new Func<string, string>(s1 => s1.TrimStart()));
         }
 
         public override string Transform(Log log, string input, string tag, Dictionary<string, string> overrides)
