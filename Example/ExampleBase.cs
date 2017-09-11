@@ -14,6 +14,7 @@ namespace Example
             _log = new Log(GetType().Name);
         }
 
+        public abstract void Selected();
         public abstract void Echo(string text);
     }
 }

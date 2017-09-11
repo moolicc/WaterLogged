@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Example.Examples;
-using WaterLogged.Logic.Parsing;
 
 namespace Example
 {
@@ -15,16 +14,11 @@ namespace Example
             _examples = new List<ExampleBase>();
             _examples.Add(new Example1());
             _examples.Add(new Example2());
-
-
-
-            WaterLogged.Logic.Parsing.Evaluator e = new Evaluator("#{1 - 1 == -1 + 1}");
-            Console.WriteLine(e.Eval());
-
-
+            _examples.Add(new Example3());
+            _examples.Add(new Example4());
 
             _selectedExample = -1;
-            //SelectExample();
+            SelectExample();
 
             Console.WriteLine("Press the ANY key to continue...");
             Console.ReadLine();
@@ -62,6 +56,7 @@ namespace Example
         {
             Console.WriteLine("Type 'end' to select a new example.");
             Console.WriteLine(_examples[_selectedExample].IntroText);
+            _examples[_selectedExample].Selected();
 
             while (true)
             {

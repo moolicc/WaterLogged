@@ -15,5 +15,9 @@ namespace Example.Examples
         {
             _log.WriteLine(text);
         }
+
+        public override void Selected()
+        {
+        }
     }
 }

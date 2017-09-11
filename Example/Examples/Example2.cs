@@ -34,5 +34,9 @@ namespace Example.Examples
 
             _log.WriteLineTag(text, tag);
         }
+
+        public override void Selected()
+        {
+        }
     }
 }
