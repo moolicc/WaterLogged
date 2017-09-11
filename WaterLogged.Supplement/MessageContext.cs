@@ -19,23 +19,10 @@ namespace WaterLogged.Supplement
             Tag = tag;
             Message = message;
 
-            Variables.Add("log", log.Name);
-            Variables.Add("tag", tag);
-            Variables.Add("message", message);
-            Variables.Add("datetime", DateTime.Now);
-        }
-
-        public override object GetVariable(string name)
-        {
-            if (Variables.ContainsKey(name))
-            {
-                return Variables[name];
-            }
-            if (BaseContext.Variables.ContainsKey(name))
-            {
-                return BaseContext.Variables[name];
-            }
-            return base.GetVariable(name);
+            Functions.Add("log", new Func<string>(() => log.Name));
+            Functions.Add("tag", new Func<string>(() => tag));
+            Functions.Add("message", new Func<string>(() => message));
+            Functions.Add("datetime", new Func<string>(() => DateTime.Now.ToString()));
         }
 
         public override Delegate GetDelegate(string name)
@@ -57,7 +44,6 @@ namespace WaterLogged.Supplement
             Log = null;
             Tag = null;
             Message = null;
-            Variables.Clear();
             Functions.Clear();
         }
     }
