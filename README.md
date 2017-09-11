@@ -71,7 +71,7 @@ test1
 Converted into a more easily read syntax:
 `when(hasvalue(tag), "[" + upper(tag) + "] ") + message()` \
 I'm sure you can infer that `when` is basically an if-statement. The first parameter is a condition and the second parameter is the output of the function if the condition is true.
-Its c# decleration is
+Its c# declaration is
 ```cs
 BaseContext.Functions.Add("when", new Func<bool, string, string>((b, s) =>
 {
