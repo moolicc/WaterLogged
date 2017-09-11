@@ -19,10 +19,6 @@ namespace WaterLogged.Parsing.Expressions
 
         public string Eval(Evaluator evaluator)
         {
-            if (Parameters.Count <= 0)
-            {
-                return evaluator.Context.GetVariable(Id).ToString();
-            }
             var function = evaluator.Context.GetDelegate(Id);
             var funcParmaters = function.GetMethodInfo().GetParameters();
 
