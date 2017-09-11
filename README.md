@@ -12,15 +12,30 @@ log.AddListener(new WaterLogged.Listeners.StandardOut());
 log.WriteLine("Hello world!");
 ```
 
-The Log by default uses a BasicFormatter, but that can be changed by setting the respective "Formatter" property.
-
-Each message you send can also be sent with an accompanying "tag".
-The tag is sent to the formatter and each listener to be consumed somehow.
+The Log by default uses a BasicFormatter, but that can be changed by setting the respective "Formatter" property on the Log type.
 
 Normally, the formatter is only called to transform the message once.
 However, each listener contains a "FormatterArgs" property which is a `Dictionary<string, string>`.
 If the log encounters a listener with items in this property while the log is sending a message, it will reformat for the current listener passing these args to the formatter.
 
+## Listeners
+A listener represents an output of some kind.
+Right now there are only a few listeners implemented, with plans for more later on.
+
+The current implementations are as follow:
+  * StandardOutListener - Outputs to standard-out. It can optionally output in different colors based on tags.
+  * FileOut - Appends output to a file.
+  * TCPClientOut - Writes messages to a TCP client socket.
+
+Planned listeners:
+  * EmailOut
+  * TextMessageOut
+  * StreamOut
+  * EventOut
+  * XmlOut
+  * JsonOut
+
+## LogLevels (known as "tags" here)
 When you output a message, you can optionally send a "tag". Tags are basically loglevels, but strings instead of enums with restrictive values.
 Each listener has a TagFilter property which is an array of strings.
 This filter whitelists tags that will be output to the listener.
