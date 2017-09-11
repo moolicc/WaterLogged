@@ -29,9 +29,9 @@ namespace Example.Examples
             Console.WriteLine(
                 "%{text} - Just a string literal. Nothing special is pulled out of that except for text.");
             Console.WriteLine(
-                "#{expression} - Evaluates an expression using ncalc. Boolean and mathematical expressions are resolved from these.");
-            Console.WriteLine(
                 "${func:paramlist} - Invokes a function with the specified parameters. Parameters are separated with commas, naturally.");
+            Console.WriteLine(
+                "#{expression} - Evaluates an expression using ncalc. Boolean and mathematical expressions are resolved from these. These attempt to resolve functions used within them. Like: \"#{1 + getnum}\".");
             Console.WriteLine(
                 "You can use any combination of these to create your format string. You can even nest them within each-other like so: \"#{1 + ${getnumber}}\".");
             Console.WriteLine("Here's a list of available functions:");
