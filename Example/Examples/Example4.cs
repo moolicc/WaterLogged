@@ -59,11 +59,15 @@ namespace Example.Examples
 
             Console.WriteLine();
             Console.WriteLine("Enter format (or press enter to use the default; \"${newline}${fmtdate:${datetime},d}${newline}${message}\"):");
+            Console.WriteLine();
             string format = Console.ReadLine().Trim();
             if (!string.IsNullOrWhiteSpace(format))
             {
                 formatter.Format = format;
             }
+
+            Console.Clear();
+            Console.WriteLine("Using the format \"{0}\"", formatter.Format);
         }
 
         public override void Echo(string text)
