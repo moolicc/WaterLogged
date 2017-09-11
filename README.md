@@ -21,6 +21,13 @@ Normally, the formatter is only called to transform the message once.
 However, each listener contains a "FormatterArgs" property which is a `Dictionary<string, string>`.
 If the log encounters a listener with items in this property while the log is sending a message, it will reformat for the current listener passing these args to the formatter.
 
+When you output a message, you can optionally send a "tag". Tags are basically loglevels, but strings instead of enums with restrictive values.
+Each listener has a TagFilter property which is an array of strings.
+This filter whitelists tags that will be output to the listener.
+So if you send a message with a tag "error" and a listener doesn't have an "error" item in its filter, the listener will never see the message.
+Keep in mind that if a listener has an empty filter, all messages will be passed to it regardless of tags.
+The tag is also passed to the Formatter.
+
 # Basic formatting
 The basic formatter is not as glorified as the logical formatter. Because who would use this since the other one is more featured?
 Anyway, this formatter is included mostly because it was faster to write and start playing around with.
