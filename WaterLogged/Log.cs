@@ -15,7 +15,7 @@ namespace WaterLogged
 
 
         public Log()
-            : this(string.Format("log {0}", DateTime.Now.Ticks))
+            : this(string.Format("log{0}", DateTime.Now.Ticks))
         {
         }
 
