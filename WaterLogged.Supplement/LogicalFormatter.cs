@@ -42,6 +42,7 @@ namespace WaterLogged.Supplement
             Format = format;
             BaseContext = new Context();
             _curProc = Process.GetCurrentProcess();
+            InitContext();
         }
 
         public void InitContext()
@@ -104,6 +105,24 @@ namespace WaterLogged.Supplement
             BaseContext.Functions.Add("os", new Func<string>(() => RuntimeInformation.OSDescription));
             BaseContext.Functions.Add("arch", new Func<string>(() => RuntimeInformation.OSArchitecture.ToString()));
             BaseContext.Functions.Add("host", new Func<string>(System.Net.Dns.GetHostName));
+            BaseContext.Functions.Add("when", new Func<bool, string, string>((b, s) =>
+            {
+                if (b)
+                {
+                    return s;
+                }
+                return "";
+            }));
+            BaseContext.Functions.Add("newline", new Func<string>(() => Environment.NewLine));
+            BaseContext.Functions.Add("startswith", new Func<string, string, bool>((s1, s2) => s1.StartsWith(s2)));
+            BaseContext.Functions.Add("endswith", new Func<string, string, bool>((s1, s2) => s1.EndsWith(s2)));
+            BaseContext.Functions.Add("contains", new Func<string, string, bool>((s1, s2) => s1.Contains(s2)));
+            BaseContext.Functions.Add("index", new Func<string, string, int>((s1, s2) => s1.IndexOf(s2)));
+            BaseContext.Functions.Add("length", new Func<string, int>(s1 => s1.Length));
+            BaseContext.Functions.Add("sub", new Func<string, int, int, string>((s1, index, length) => s1.Substring(index, length)));
+            BaseContext.Functions.Add("right", new Func<string, int, string>((s1, index) => s1.Substring(index)));
+            BaseContext.Functions.Add("left", new Func<string, int, string>((s1, index) => s1.Substring(0, index)));
+            BaseContext.Functions.Add("mid", new Func<string, int, int, string>((s1, index, index2) => s1.Substring(index, index2 - index + 1)));
         }
 
         public override string Transform(Log log, string input, string tag, Dictionary<string, string> overrides)
