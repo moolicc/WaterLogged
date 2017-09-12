@@ -7,7 +7,7 @@ using System.Text;
 using WaterLogged.Parsing;
 using WaterLogged.Parsing.Expressions;
 
-namespace WaterLogged.Supplement
+namespace WaterLogged.Formatting
 {
     public class LogicalFormatter : Formatter
     {

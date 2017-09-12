@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using WaterLogged.Parsing;
 
-namespace WaterLogged.Supplement
+namespace WaterLogged.Formatting
 {
     public class MessageContext : Context, IDisposable
     {

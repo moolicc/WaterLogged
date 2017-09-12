@@ -1,5 +1,6 @@
 ﻿using System;
 using WaterLogged;
+using WaterLogged.Formatting;
 
 namespace Example.Examples
 {
@@ -16,7 +17,7 @@ namespace Example.Examples
             listener.BackColorMap.Add("info", ConsoleColor.Yellow);
             listener.BackColorMap.Add("error", ConsoleColor.Red);
             _log.AddListener(listener);
-            _log.Formatter = new BasicFormatter("[${datetime}] [${tag}] [${builddate}] ${message}");
+            _log.Formatter = new LogicalFormatter("[${datetime}] [${tag}] ${message}");
         }
 
         public override void Echo(string text)
