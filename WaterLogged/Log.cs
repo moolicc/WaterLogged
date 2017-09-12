@@ -205,5 +205,42 @@ namespace WaterLogged
                 }
             }
         }
+
+
+        //********************************************
+        // WriteObject
+        //********************************************
+        public void WriteObject(object value, object argument = null)
+        {
+            WriteObjectTag(value, "", argument);
+        }
+
+        public void WriteObject(object value, ObjectTransformer transformer, object argument = null)
+        {
+            WriteObjectTag(value, "", transformer, argument);
+        }
+
+
+        //********************************************
+        // WriteObjectTag
+        //********************************************
+        public void WriteObjectTag(object value, string tag, object argument = null)
+        {
+            string result = "";
+            if (ObjectTransformer.ContainsTransformer(value.GetType()))
+            {
+                result = ObjectTransformer.GetTransformer(value.GetType()).Transform(value, argument);
+            }
+            else
+            {
+                result = value.ToString();
+            }
+            WriteTag(result, tag);
+        }
+
+        public void WriteObjectTag(object value, string tag, ObjectTransformer transformer, object argument = null)
+        {
+            WriteTag(transformer.Transform(value, argument), tag);
+        }
     }
 }
