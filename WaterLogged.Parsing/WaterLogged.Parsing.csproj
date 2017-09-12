@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WaterLogged.Serialization\WaterLogged.Serialization.csproj" />
-    <ProjectReference Include="..\WaterLogged\WaterLogged.csproj" />
   </ItemGroup>
 
 </Project>

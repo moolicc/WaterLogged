@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CoreCLR-NCalc" Version="2.1.3" />
+  </ItemGroup>
+
 </Project>

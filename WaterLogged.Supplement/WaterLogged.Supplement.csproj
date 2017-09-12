@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WaterLogged.Parsing\WaterLogged.Parsing.csproj" />
     <ProjectReference Include="..\WaterLogged.Serialization\WaterLogged.Serialization.csproj" />
     <ProjectReference Include="..\WaterLogged\WaterLogged.csproj" />
   </ItemGroup>
