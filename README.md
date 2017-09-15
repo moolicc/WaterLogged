@@ -12,7 +12,8 @@ log.AddListener(new WaterLogged.Listeners.StandardOut());
 log.WriteLine("Hello world!");
 ```
 
-The Log by default uses a BasicFormatter, but that can be changed by setting the respective "Formatter" property on the Log type.
+~~The Log by default uses a BasicFormatter, but that can be changed by setting the respective "Formatter" property on the Log type.~~
+There is no basicformatter anymore.
 
 Normally, the formatter is only called to transform the message once.
 However, each listener contains a "FormatterArgs" property which is a `Dictionary<string, string>`.
@@ -42,6 +43,29 @@ This filter whitelists tags that will be output to the listener.
 So if you send a message with a tag "error" and a listener doesn't have an "error" item in its filter, the listener will never see the message.
 Keep in mind that if a listener has an empty filter, all messages will be passed to it regardless of tags.
 The tag is also passed to the Formatter.
+
+## Structured log messages
+### See <https://messagetemplates.org/> for details and terminology
+Logs support structured messages through four functions
+  *  WriteStructured
+  *  WriteStructuredNamed
+  *  WriteStructuredParent
+  *  WriteStructuredStaticParent
+
+`WriteStructured` takes in a template string, a tag and an array of values for the holes in the template. If a value is not used by a hole, it is still evaluated as part of the message. 
+
+`WriteStructuredNamed` takes in a template string, a tag and an array of tuple values (string, object). The first item in each tuple correlates to a hole's name. The second value will be identified as the hole's actual value. If a tuple is unused, it will still be evaluated as part of the message.
+
+`WriteStructuredParent` takes in a template string, a tag and a object of any type. The object's properties and fields will be evaulated as the hole values. The names of the properties/fields will correspond to the each hole's name. You can filter which properties and fields by using the `ParentObjectAttribute` and `ParentObjectValueAttribute` attributes. Unused properties/fields will indeed still be a part of the message.
+
+`WriteStructuredStaticParent` - static variant of WriteStructuredParent. Takes in a template string, a tag and the type of the static class.
+
+When you write a structured message, the template first passes through the log's formatter. This allows you to use rich expressions along with templating.
+For example: `log.WriteStructured("Hello, ${when:${startswith:${tag},b},\\{name\\}}${newline}", _tag, text);` - the `{name}` hole will only exist when the tag starts with the letter 'b'.
+
+Structured-messages are output to *TemplatedMessageSinks* which are just like Listeners except for structured messages. There indeed exists a *TemplateRedirectSink* which will process the output StructuredMessage and re-output it to *log.WriteTag*.
+
+The `WaterLogged.Templating.TemplateProcessor` type contains all necessary functions for processing templated messages. Including a *ProcessMessage* function which will convert a StructuredMessage into a string.
 
 # Basic formatting
 The basic formatter is not as glorified as the logical formatter. Because who would use this since the other one is more featured?

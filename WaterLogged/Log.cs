@@ -10,8 +10,10 @@ namespace WaterLogged
         public bool Enabled { get; set; }
         public Formatter Formatter { get; set; }
         public Listener[] Listeners { get { return _listeners.Values.ToArray(); } }
+        public TemplatedMessageSink[] Sinks { get { return _sinks.Values.ToArray(); } }
 
         private Dictionary<string, Listener> _listeners;
+        private Dictionary<string, TemplatedMessageSink> _sinks;
 
 
         public Log()
@@ -22,6 +24,7 @@ namespace WaterLogged
         public Log(string name)
         {
             _listeners = new Dictionary<string, Listener>();
+            _sinks = new Dictionary<string, TemplatedMessageSink>();
             Name = name;
             Enabled = true;
         }
@@ -61,6 +64,46 @@ namespace WaterLogged
         {
             var oldListener = _listeners[oldName];
             _listeners.Add(newName, oldListener);
+            _listeners.Remove(oldName);
+        }
+
+
+        public void AddSink(TemplatedMessageSink sink)
+        {
+            if (sink.Log != null)
+            {
+                throw new InvalidOperationException("A template message sink may only be bound to one log at a time.");
+            }
+
+            if (string.IsNullOrWhiteSpace(sink.Name))
+            {
+                sink.Name = DateTime.Now.Ticks.ToString();
+            }
+            sink.Log = this;
+            _sinks.Add(sink.Name, sink);
+        }
+
+        public bool ContainsSink(string name)
+        {
+            return _sinks.ContainsKey(name);
+        }
+
+        public TemplatedMessageSink GetSink(string name)
+        {
+            return _sinks[name];
+        }
+
+        public void RemoveSink(string name)
+        {
+            _sinks[name].Log = null;
+            _sinks.Remove(name);
+        }
+
+        public void ChangeSinkName(string oldName, string newName)
+        {
+            var oldSink = _sinks[oldName];
+            _sinks.Add(newName, oldSink);
+            _sinks.Remove(oldName);
         }
 
         //********************************************
@@ -241,6 +284,112 @@ namespace WaterLogged
         public void WriteObjectTag(object value, string tag, ObjectTransformer transformer, object argument = null)
         {
             WriteTag(transformer.Transform(value, argument), tag);
+        }
+
+
+
+        public void WriteStructuredNamed(string template, string tag, params (string, object)[] holeValues)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+            if (Formatter != null)
+            {
+                template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
+            }
+            var message = new Templating.TemplateProcessor().ProcessNamedTemplate(template, holeValues);
+
+            lock (_sinks)
+            {
+                foreach (var sinkKeyValue in _sinks)
+                {
+                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    {
+                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                    }
+                }
+            }
+        }
+
+        public void WriteStructured(string template, string tag, params object[] holeValues)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+            if (Formatter != null)
+            {
+                template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
+            }
+            var message = new Templating.TemplateProcessor().ProcessTemplate(template, holeValues);
+
+            lock (_sinks)
+            {
+                foreach (var sinkKeyValue in _sinks)
+                {
+                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    {
+                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                    }
+                }
+            }
+        }
+
+        public void WriteStructuredParent(string template, string tag, object parentObject)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+            if (Formatter != null)
+            {
+                template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
+            }
+            var message = new Templating.TemplateProcessor().ProcessParentedTemplate(template, parentObject);
+
+            lock (_sinks)
+            {
+                foreach (var sinkKeyValue in _sinks)
+                {
+                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    {
+                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                    }
+                }
+            }
+        }
+
+        public void WriteStructuredStaticParent(string template, string tag, Type parentType)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
+            if (Formatter != null)
+            {
+                template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
+            }
+            var message = new Templating.TemplateProcessor().ProcessParentedTemplate(template, parentType);
+
+            lock (_sinks)
+            {
+                foreach (var sinkKeyValue in _sinks)
+                {
+                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    {
+                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                    }
+                }
+            }
         }
     }
 }

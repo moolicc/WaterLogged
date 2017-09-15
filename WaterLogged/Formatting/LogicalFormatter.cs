@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,6 +12,8 @@ namespace WaterLogged.Formatting
 {
     public class LogicalFormatter : Formatter
     {
+        public override bool SupportsTemplating { get { return true; } }
+
         public string Format
         {
             get { return _format; }
@@ -131,10 +134,21 @@ namespace WaterLogged.Formatting
             BaseContext.Functions.Add("trimstart", new Func<string, string>(s1 => s1.TrimStart()));
         }
 
+        public override string Transform(string template, Log log, string tag, Dictionary<string, string> overrides)
+        {
+            var sourceTree = new Parser(template).Parse();
+            return DoFormat(sourceTree, log, "", tag, overrides);
+        }
+
         public override string Transform(Log log, string input, string tag, Dictionary<string, string> overrides)
         {
+            return DoFormat(_sourceTree, log, input, tag, overrides);
+        }
+
+        private string DoFormat(IExpression[] sourceTree, Log log, string input, string tag, Dictionary<string, string> overrides)
+        {
             var context = new MessageContext(BaseContext, log, tag, input);
-            var evaluator = new Evaluator(_sourceTree);
+            var evaluator = new Evaluator(sourceTree);
             evaluator.Context = context;
 
             var result = evaluator.Eval();
