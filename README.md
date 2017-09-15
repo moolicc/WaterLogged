@@ -67,6 +67,7 @@ Structured-messages are output to *TemplatedMessageSinks* which are just like Li
 
 The `WaterLogged.Templating.TemplateProcessor` type contains all necessary functions for processing templated messages. Including a *ProcessMessage* function which will convert a StructuredMessage into a string.
 
+See WaterLogged.Serialization.Json for a sink that outputs to a json file.
 # Basic formatting
 The basic formatter is not as glorified as the logical formatter. Because who would use this since the other one is more featured?
 Anyway, this formatter is included mostly because it was faster to write and start playing around with.
