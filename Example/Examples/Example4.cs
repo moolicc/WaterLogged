@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 using WaterLogged;
-using WaterLogged.Supplement;
+using WaterLogged.Formatting;
 
 namespace Example.Examples
 {

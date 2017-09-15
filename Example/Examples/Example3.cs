@@ -1,6 +1,6 @@
 ﻿using System;
 using WaterLogged;
-using WaterLogged.Supplement;
+using WaterLogged.Formatting;
 
 namespace Example.Examples
 {
