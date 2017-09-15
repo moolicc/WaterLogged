@@ -1,0 +1,10 @@
+{
+  "time": "2017-09-15T17:22:39.7513373-05:00",
+  "template": "Hello, {name}",
+  "name": "bob"
+}
+{
+  "time": "2017-09-15T17:23:13.951914-05:00",
+  "template": "Hello, {name}",
+  "name": "BILL"
+}

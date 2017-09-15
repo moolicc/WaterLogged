@@ -20,7 +20,7 @@ namespace WaterLogged.Templating
 
         public HoleId(int positionalId)
         {
-            NamedId = "";
+            NamedId = positionalId.ToString();
             PositionalId = positionalId;
             IdType = HoleIdTypes.Positional;
         }

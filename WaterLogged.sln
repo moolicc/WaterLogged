@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Serialization.X
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Supplement", "WaterLogged.Supplement\WaterLogged.Supplement.csproj", "{6AA6859E-3BA2-48A6-B557-AF531E3B415D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterLogged.Serialization.Json", "WaterLogged.Serialization.Json\WaterLogged.Serialization.Json.csproj", "{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
