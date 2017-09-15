@@ -21,6 +21,7 @@ namespace WaterLogged.Serialization.Xml
             ParseImports();
             ParseFormatters();
             ParseListeners();
+            ParseSinks();
             ParseLogs();
 
             return Configuration;
@@ -56,7 +57,18 @@ namespace WaterLogged.Serialization.Xml
                 Configuration.Listeners.Add(definition.Id, definition);
             }
         }
-        
+
+
+        private void ParseSinks()
+        {
+            var sinkElements = _rootElement.Elements("sink");
+            foreach (var sinkElement in sinkElements)
+            {
+                var definition = ParseSink(sinkElement);
+                Configuration.Sinks.Add(definition.Id, definition);
+            }
+        }
+
         private void ParseLogs()
         {
             var logElements = _rootElement.Elements("logs");
@@ -71,6 +83,11 @@ namespace WaterLogged.Serialization.Xml
         private ListenerDefinition ParseListener(XElement element)
         {
             return ParseDefinition(new ListenerDefinition(), element);
+        }
+
+        private SinkDefinition ParseSink(XElement element)
+        {
+            return ParseDefinition(new SinkDefinition(), element);
         }
 
         private FormatterDefinition ParseFormatter(XElement element)

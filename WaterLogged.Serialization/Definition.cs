@@ -6,6 +6,7 @@ namespace WaterLogged.Serialization
     {
         LogDefinition,
         ListenerDefinition,
+        SinkDefinition,
         FormatterDefinition,
     }
 

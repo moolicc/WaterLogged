@@ -11,6 +11,7 @@ namespace WaterLogged.Serialization
         public List<Configuration> Imports { get; private set; }
         public Dictionary<string, FormatterDefinition> Formatters { get; private set; }
         public Dictionary<string, ListenerDefinition> Listeners { get; private set; }
+        public Dictionary<string, SinkDefinition> Sinks { get; private set; }
         public Dictionary<string, LogDefinition> Logs { get; private set; }
 
         public static Configuration FromLogs(Log[] logs)
@@ -25,6 +26,12 @@ namespace WaterLogged.Serialization
                     var listenerDefinition = GetListenerDefinition(logListener);
                     logDefinition.ListenerNames.Add(listenerDefinition.Id);
                     config.Listeners.Add(listenerDefinition.Id, listenerDefinition);
+                }
+                foreach (var logSink in log.Sinks)
+                {
+                    var sinkDefinition = GetSinkDefinition(logSink);
+                    logDefinition.SinkNames.Add(sinkDefinition.Id);
+                    config.Sinks.Add(sinkDefinition.Id, sinkDefinition);
                 }
                 var formatterDefinition = GetFormatterDefinition(log.Formatter);
                 config.Formatters.Add(formatterDefinition.Id, formatterDefinition);
@@ -59,6 +66,15 @@ namespace WaterLogged.Serialization
             definition.Id = string.Format("listener{0}", DateTime.Now.Ticks);
             definition.Type = listener.GetType().AssemblyQualifiedName;
             LoadPropertyValues(definition, listener);
+            return definition;
+        }
+
+        private static SinkDefinition GetSinkDefinition(TemplatedMessageSink sink)
+        {
+            var definition = new SinkDefinition();
+            definition.Id = string.Format("sink{0}", DateTime.Now.Ticks);
+            definition.Type = sink.GetType().AssemblyQualifiedName;
+            LoadPropertyValues(definition, sink);
             return definition;
         }
 
@@ -114,6 +130,19 @@ namespace WaterLogged.Serialization
             }
 
             return (Listener)creator.Create();
+        }
+
+        public TemplatedMessageSink ResolveSink(string name)
+        {
+            SinkDefinition sink = Sinks[name];
+            TypeCreator creator = new TypeCreator(sink.Type);
+
+            foreach (var formatterProperty in sink.Properties)
+            {
+                creator.MemberValues.Add(formatterProperty.Key, formatterProperty.Value);
+            }
+
+            return (TemplatedMessageSink)creator.Create();
         }
 
         public Log ResolveLog(string name)
