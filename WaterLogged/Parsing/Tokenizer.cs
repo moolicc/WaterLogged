@@ -22,6 +22,45 @@ namespace WaterLogged.Parsing
             for (_index = 0; _index < expression.Length; _index++)
             {
                 char curChar = expression[_index];
+                char nextChar = '\0';
+                if (_index + 1 < expression.Length)
+                {
+                    nextChar = expression[_index + 1];
+                }
+                if (curChar == '\\')
+                {
+                    if (nextChar == '{')
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "{"));
+                    }
+                    else if (nextChar == '}')
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "}"));
+                    }
+                    else if (nextChar == '#')
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "#"));
+                    }
+                    else if (nextChar == '$')
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "$"));
+                    }
+                    else if (nextChar == '%')
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "%"));
+                    }
+                    else if (nextChar == '\\')
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "\\"));
+                    }
+                    else
+                    {
+                        tokens.Add(new TextDataToken().Init(_index, "\\"));
+                        continue;
+                    }
+                    _index++;
+                    continue;
+                }
                 if (curChar == '{')
                 {
                     tokens.Add(new OpenBraceToken().Init(_index, "{"));
@@ -65,6 +104,22 @@ namespace WaterLogged.Parsing
             for (int i = _index; i < expression.Length; i++)
             {
                 char curChar = expression[i];
+                char nextChar = '\0';
+                if (_index + 1 < expression.Length)
+                {
+                    nextChar = expression[_index + 1];
+                }
+
+                if (curChar == '\\')
+                {
+                    if (nextChar == '{' || nextChar == '}' || nextChar == '#' || nextChar == '$' || nextChar == '%' || nextChar == '\\')
+                    {
+                        builder.Append(nextChar);
+                        i++;
+                        continue;
+                    }
+                }
+
                 if (targets.Contains(curChar))
                 {
                     _index = i - 1;
