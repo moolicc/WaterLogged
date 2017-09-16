@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using WaterLogged.Templating;
 
 namespace WaterLogged
 {
@@ -378,6 +379,26 @@ namespace WaterLogged
             }
             var message = new Templating.TemplateProcessor().ProcessParentedTemplate(template, parentType);
 
+            lock (_sinks)
+            {
+                foreach (var sinkKeyValue in _sinks)
+                {
+                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
+                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    {
+                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                    }
+                }
+            }
+        }
+
+        public void WriteStructuredMessage(StructuredMessage message, string tag)
+        {
+            if (!Enabled)
+            {
+                return;
+            }
             lock (_sinks)
             {
                 foreach (var sinkKeyValue in _sinks)

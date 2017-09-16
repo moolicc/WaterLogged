@@ -7,9 +7,9 @@ using System.Text;
 
 namespace WaterLogged.Templating
 {
-    public class TemplateProcessor
+    public static class TemplateProcessor
     {
-        public StructuredMessage ProcessTemplate(string template, params object[] holeValues)
+        public static StructuredMessage ProcessTemplate(string template, params object[] holeValues)
         {
             var message = new StructuredMessage(template);
             var holes = ProcessHoles(template);
@@ -44,27 +44,27 @@ namespace WaterLogged.Templating
             return message;
         }
 
-        public StructuredMessage ProcessParentedTemplate(string template, object parentObject)
+        public static StructuredMessage ProcessParentedTemplate(string template, object parentObject)
         {
             return ProcessParentedTemplate(template, parentObject, parentObject.GetType());
         }
 
-        public StructuredMessage ProcessParentedTemplate<T>(string template, T parentObject)
+        public static StructuredMessage ProcessParentedTemplate<T>(string template, T parentObject)
         {
             return ProcessParentedTemplate(template, parentObject, parentObject.GetType());
         }
 
-        public StructuredMessage ProcessParentedTemplate(string template, Type parentType)
+        public static StructuredMessage ProcessParentedTemplate(string template, Type parentType)
         {
             return ProcessParentedTemplate(template, null, parentType);
         }
 
-        public StructuredMessage ProcessParentedTemplate<T>(string template)
+        public static StructuredMessage ProcessParentedTemplate<T>(string template)
         {
             return ProcessParentedTemplate(template, null, typeof(T));
         }
 
-        public StructuredMessage ProcessNamedTemplate(string template, params (string, object)[] holeValues)
+        public static StructuredMessage ProcessNamedTemplate(string template, params (string, object)[] holeValues)
         {
             var message = new StructuredMessage(template);
             var holes = ProcessHoles(template);
@@ -109,7 +109,7 @@ namespace WaterLogged.Templating
                 if (!usedIndices.Contains(i))
                 {
                     var value = holeValues[i];
-                    message.UnusedValues.Add(value.Item1, value.Item2);
+                    message.ContextValues.Add(value.Item1, value.Item2);
                 }
             }
 
@@ -117,7 +117,7 @@ namespace WaterLogged.Templating
         }
          
 
-        public Hole[] ProcessHoles(string template)
+        public static Hole[] ProcessHoles(string template)
         {
             List<Hole> holes = new List<Hole>();
             for (int i = 0; i < template.Length; i++)
@@ -144,7 +144,7 @@ namespace WaterLogged.Templating
         }
 
 
-        public string ProcessMessage(StructuredMessage message)
+        public static string ProcessMessage(StructuredMessage message)
         {
             StringBuilder builder = new StringBuilder();
 
@@ -167,7 +167,7 @@ namespace WaterLogged.Templating
         }
 
 
-        private StructuredMessage ProcessParentedTemplate(string template, object parentObject, Type type)
+        private static StructuredMessage ProcessParentedTemplate(string template, object parentObject, Type type)
         {
             var parentAttrib = type.GetTypeInfo().GetCustomAttribute<ParentObjectAttribute>();
             if (parentAttrib == null)
@@ -248,7 +248,7 @@ namespace WaterLogged.Templating
             return ProcessNamedTemplate(template, values.ToArray());
         }
 
-        private Hole ProcessHole(string template, int index, out int newIndex)
+        private static Hole ProcessHole(string template, int index, out int newIndex)
         {
             newIndex = -1;
             HoleId id = null;
