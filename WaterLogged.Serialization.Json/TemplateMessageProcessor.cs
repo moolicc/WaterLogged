@@ -25,7 +25,7 @@ namespace WaterLogged.Serialization.Json
                 }
                 holeValues.Add((value.Key, value.Value.Value<object>()));
             }
-            return new TemplateProcessor().ProcessNamedTemplate(template, holeValues.ToArray());
+            return TemplateProcessor.ProcessNamedTemplate(template, holeValues.ToArray());
         }
 
         public static string Write(StructuredMessage message)
@@ -51,7 +51,7 @@ namespace WaterLogged.Serialization.Json
                 }
                 jObject.Add(messageValue.Key.Id.NamedId, JToken.FromObject(value));
             }
-            foreach (var messageValue in message.UnusedValues)
+            foreach (var messageValue in message.ContextValues)
             {
                 jObject.Add(messageValue.Key, JToken.FromObject(messageValue.Value));
             }
