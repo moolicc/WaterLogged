@@ -19,6 +19,7 @@ namespace Example
             _examples.Add(new Example5());
             _examples.Add(new Example6());
             _examples.Add(new Example7());
+            _examples.Add(new Example8());
 
             _selectedExample = -1;
             SelectExample();
