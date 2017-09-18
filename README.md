@@ -27,9 +27,9 @@ The current implementations are as follow:
   * StandardOutListener - Outputs to standard-out. It can optionally output in different colors based on tags.
   * FileOut - Appends output to a file.
   * TCPClientOut - Writes messages to a TCP client socket.
+  * EmailOut - Outputs through SMPT. - Thanks to [bmatthews99](https://github.com/bmatthews99)
 
 Planned listeners:
-  * EmailOut
   * TextMessageOut
   * StreamOut
   * EventOut
@@ -69,11 +69,12 @@ The `WaterLogged.Templating.TemplateProcessor` type contains all necessary funct
 
 See WaterLogged.Serialization.Json for a sink that outputs to a json file.
 # Basic formatting
-The basic formatter is not as glorified as the logical formatter. Because who would use this since the other one is more featured?
+~~The basic formatter is not as glorified as the logical formatter. Because who would use this since the other one is more featured?
 Anyway, this formatter is included mostly because it was faster to write and start playing around with.
 Its syntax is kind of like string interpolation: "${func:arg}". Where each function can only take a single parameter.
 An example would be: "[${datetime}] [${tag}] [${builddate}] ${message}".
-Although that's probably not the best example, since it doesn't contain anything that consumes an argument.
+Although that's probably not the best example, since it doesn't contain anything that consumes an argument.~~
+# THIS. IS. NOT. A. THING. NOW.
 
 # "Logic" based formatting
 ## Uses NCalc to evaluate mathematical/boolean expressions from https://github.com/sklose/NCalc2
