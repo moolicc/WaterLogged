@@ -8,7 +8,7 @@ namespace WaterLogged.Templating
     {
         public override void ProcessMessage(Log log, StructuredMessage message, string tag)
         {
-            log.WriteTag(new TemplateProcessor().ProcessMessage(message), tag);
+            log.WriteTag(TemplateProcessor.ProcessMessage(message), tag);
         }
     }
 }

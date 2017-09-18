@@ -299,7 +299,7 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = new Templating.TemplateProcessor().ProcessNamedTemplate(template, holeValues);
+            var message = TemplateProcessor.ProcessNamedTemplate(template, holeValues);
 
             lock (_sinks)
             {
@@ -325,7 +325,7 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = new Templating.TemplateProcessor().ProcessTemplate(template, holeValues);
+            var message = TemplateProcessor.ProcessTemplate(template, holeValues);
 
             lock (_sinks)
             {
@@ -351,7 +351,7 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = new Templating.TemplateProcessor().ProcessParentedTemplate(template, parentObject);
+            var message = TemplateProcessor.ProcessParentedTemplate(template, parentObject);
 
             lock (_sinks)
             {
@@ -377,7 +377,8 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = new Templating.TemplateProcessor().ProcessParentedTemplate(template, parentType);
+            
+            var message = TemplateProcessor.ProcessParentedTemplate(template, parentType);
 
             lock (_sinks)
             {
