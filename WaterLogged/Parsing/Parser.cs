@@ -7,14 +7,27 @@ using WaterLogged.Parsing.Tokens;
 
 namespace WaterLogged.Parsing
 {
+    /// <summary>
+    /// Parses a format string into an <see cref="WaterLogged.Parsing.Expressions.IExpression"/> array.
+    /// </summary>
     public class Parser
     {
+        /// <summary>
+        /// The format string to parse.
+        /// </summary>
         public string Source { get; private set; }
+        /// <summary>
+        /// The tokenizer from which token will be... Tokenized...
+        /// </summary>
         public Tokenizer Tokenizer { get; private set; }
 
         private Token[] _tokens;
         private int _tokenIndex;
 
+        /// <summary>
+        /// Instantiates a Parser and parses tokens from the specified source string.
+        /// </summary>
+        /// <param name="source"></param>
         public Parser(string source)
         {
             Source = source;
@@ -23,6 +36,9 @@ namespace WaterLogged.Parsing
             _tokenIndex = -1;
         }
 
+        /// <summary>
+        /// Parsed the tokens into an array of <see cref="WaterLogged.Parsing.Expressions.IExpression"/>.
+        /// </summary>
         public IExpression[] Parse()
         {
             List<IExpression> expressions = new List<IExpression>();

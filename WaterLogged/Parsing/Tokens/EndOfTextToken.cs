@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WaterLogged.Parsing.Tokens
+﻿namespace WaterLogged.Parsing.Tokens
 {
+    /// <summary>
+    /// Represents the end of the token stream.
+    /// </summary>
+    /// <inheritdoc />
     public class EndOfTextToken : Token
     {
     }

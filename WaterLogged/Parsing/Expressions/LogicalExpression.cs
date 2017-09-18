@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace WaterLogged.Parsing.Expressions
 {
+    /// <summary>
+    /// Implements an expression to evaluate mathematical and boolean expressions using NCalc in the form '#{1 + 1}'.
+    /// </summary>
     public class LogicalExpression : IExpression
     {
+        /// <summary>
+        /// The underlying expression to evaluate.
+        /// </summary>
         public IExpression NestedExpression { get; set; }
 
         public LogicalExpression(IExpression expression)
@@ -14,6 +18,7 @@ namespace WaterLogged.Parsing.Expressions
             NestedExpression = expression;
         }
 
+        /// <inheritdoc />
         public string Eval(Evaluator evaluator)
         {
             var expression = new NCalc.Expression(NestedExpression.Eval(evaluator));

@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WaterLogged.Parsing.Tokens;
 
 namespace WaterLogged.Parsing
 {
+    /// <summary>
+    /// Transforms an input string into an array of <see cref="WaterLogged.Parsing.Tokens.Token"/>.
+    /// </summary>
     public class Tokenizer
     {
         private int _index;
@@ -15,6 +17,10 @@ namespace WaterLogged.Parsing
         //% means interpret as string
         //Nothing means interpret as string
 
+        /// <summary>
+        /// Evalutes the specified input string into tokens.
+        /// </summary>
+        /// <param name="expression">The string to evaluate.</param>
         public Tokens.Token[] EvaluateTokens(string expression)
         {
             List<Token> tokens = new List<Token>();

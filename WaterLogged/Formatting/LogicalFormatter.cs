@@ -10,10 +10,24 @@ using WaterLogged.Parsing.Expressions;
 
 namespace WaterLogged.Formatting
 {
+    /// <summary>
+    /// Formatter implementation for expression-based formatting.
+    /// </summary>
     public class LogicalFormatter : Formatter
     {
+        /// <summary>
+        /// Gets a value indicating whether or not this LogicalFormatter supports templated messages.
+        /// Spoiler: It does.
+        /// </summary>
         public override bool SupportsTemplating { get { return true; } }
 
+        /// <summary>
+        /// Gets or sets the format string for this LogicalFormatter.
+        /// </summary>
+        /// <remarks>
+        /// A simple example would be:
+        /// "1 + 1 = #{1 + 1}. Also; ${message}"
+        /// </remarks>
         public string Format
         {
             get { return _format; }
@@ -28,18 +42,33 @@ namespace WaterLogged.Formatting
             }
         }
 
+        /// <summary>
+        /// The base context to use when resolving function calls.
+        /// </summary>
         public Context BaseContext { get; set; }
+
+        /// <summary>
+        /// A set of variables that can be accessed from the format string by using the
+        /// "getvar" and "setvar" functions.
+        /// </summary>
         public Dictionary<string, string> Variables { get; private set; }
 
         private string _format;
         private IExpression[] _sourceTree;
         private Process _curProc;
 
+        /// <summary>
+        /// Instantiates a new instance of the LogicalFormatter; using the format "${message}".
+        /// </summary>
         public LogicalFormatter()
             : this("${message}")
         {
         }
-
+        
+        /// <summary>
+        /// Instantiates a new instance of the LogicalFormatter; Using the specified format string.
+        /// </summary>
+        /// <param name="format">The format string.</param>
         public LogicalFormatter(string format)
         {
             Format = format;
@@ -48,6 +77,9 @@ namespace WaterLogged.Formatting
             InitContext();
         }
 
+        /// <summary>
+        /// Initializes the selected BaseContext with default functions.
+        /// </summary>
         public void InitContext()
         {
             BaseContext.Functions.Add("fmtdate", new Func<DateTime, string, string>((o, s) => string.Format("{0:" + s + "}", o)));
@@ -134,12 +166,26 @@ namespace WaterLogged.Formatting
             BaseContext.Functions.Add("trimstart", new Func<string, string>(s1 => s1.TrimStart()));
         }
 
+        /// <summary>
+        /// Transforms the specified template string and returns the results.
+        /// </summary>
+        /// <param name="template">The template to transform.</param>
+        /// <param name="log">The acting log.</param>
+        /// <param name="tag">The tag of the message.</param>
+        /// <param name="overrides">Formatter parameters to override.</param>
         public override string Transform(string template, Log log, string tag, Dictionary<string, string> overrides)
         {
             var sourceTree = new Parser(template).Parse();
             return DoFormat(sourceTree, log, "", tag, overrides);
         }
 
+        /// <summary>
+        /// Transforms the specified input message and returns the results.
+        /// </summary>
+        /// <param name="log">The acting log.</param>
+        /// <param name="input">The input message to transform.</param>
+        /// <param name="tag">The tag of the message.</param>
+        /// <param name="overrides">Formatter parameters to override.</param>
         public override string Transform(Log log, string input, string tag, Dictionary<string, string> overrides)
         {
             return DoFormat(_sourceTree, log, input, tag, overrides);

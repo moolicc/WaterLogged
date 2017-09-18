@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WaterLogged.Parsing.Tokens
+﻿namespace WaterLogged.Parsing.Tokens
 {
+    /// <summary>
+    /// Represents a '%{' token.
+    /// </summary>
+    /// <inheritdoc />
     public class LiteralToken : FormatterToken
     {
     }
