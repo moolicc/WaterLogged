@@ -41,6 +41,9 @@ namespace WaterLogged.Listeners
 
         public void Disconnect()
         {
+            _stream.Dispose();
+            _client.Dispose();
+
         }
 
 
