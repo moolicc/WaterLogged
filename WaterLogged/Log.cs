@@ -52,6 +52,7 @@ namespace WaterLogged
             _sinks = new Dictionary<string, TemplatedMessageSink>();
             Name = name;
             Enabled = true;
+            Global.LogCreated(this);
         }
 
         /// <summary>
