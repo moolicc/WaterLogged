@@ -27,7 +27,30 @@ namespace WaterLogged.Serialization
             try
             {
                 type = Type.GetType(TypeName);
-                value = Activator.CreateInstance(type);
+                var constructors = type.GetConstructors();
+                List<object> parameterValueList = new List<object>();
+
+                foreach (var ctor in constructors)
+                {
+                    var parameters = ctor.GetParameters();
+                    bool success = true;
+                    foreach (var param in parameters)
+                    {
+                        if (!MemberValues.ContainsKey(param.Name))
+                        {
+                            parameterValueList.Clear();
+                            success = false;
+                            break;
+                        }
+                        parameterValueList.Add(StringConversion.Converter.Convert(MemberValues[param.Name], param.ParameterType));
+                    }
+                    if (success)
+                    {
+                        break;
+                    }
+                }
+
+                value = Activator.CreateInstance(type, parameterValueList.ToArray());
             }
             catch (Exception e)
             {
