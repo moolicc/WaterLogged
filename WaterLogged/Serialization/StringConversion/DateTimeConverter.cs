@@ -2,6 +2,7 @@
 
 namespace WaterLogged.Serialization.StringConversion
 {
+    /// <inheritdoc />
     public class DateTimeConverter : IStringConverter
     {
         public bool SupportsType(Type type)

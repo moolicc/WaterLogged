@@ -4,11 +4,15 @@ using System.Text;
 
 namespace WaterLogged.Templating
 {
+    /// <summary>
+    /// Implements a <see cref="TemplatedMessageSink"/> that renders a structured message and outputs it back to the owning log.
+    /// </summary>
+    /// <inheritdoc />
     public class TemplateRedirectSink : TemplatedMessageSink
     {
-        public override void ProcessMessage(Log log, StructuredMessage message, string tag)
+        public override void ProcessMessage(StructuredMessage message, string tag)
         {
-            log.WriteTag(TemplateProcessor.ProcessMessage(message), tag);
+            Log.WriteTag(TemplateProcessor.ProcessMessage(message), tag);
         }
     }
 }

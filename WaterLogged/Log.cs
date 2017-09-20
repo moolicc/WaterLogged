@@ -5,23 +5,47 @@ using WaterLogged.Templating;
 
 namespace WaterLogged
 {
+    /// <summary>
+    /// Represents a Log.
+    /// </summary>
     public class Log
     {
+        /// <summary>
+        /// Gets the name of this log.
+        /// </summary>
         public string Name { get; private set; }
+        /// <summary>
+        /// Gets or sets a value indicating if this <see cref="Log"/> is enabled.
+        /// </summary>
         public bool Enabled { get; set; }
+        /// <summary>
+        /// Gets or sets the formatter to pass messages through.
+        /// </summary>
         public Formatter Formatter { get; set; }
+        /// <summary>
+        /// Gets an array of <see cref="Listeners"/>.
+        /// </summary>
         public Listener[] Listeners { get { return _listeners.Values.ToArray(); } }
+        /// <summary>
+        /// Gets an array of <see cref="TemplatedMessageSink"/>.
+        /// </summary>
         public TemplatedMessageSink[] Sinks { get { return _sinks.Values.ToArray(); } }
 
         private Dictionary<string, Listener> _listeners;
         private Dictionary<string, TemplatedMessageSink> _sinks;
 
-
+        /// <summary>
+        /// Instantiates an instance of <see cref="Log"/> with a default name.
+        /// </summary>
         public Log()
             : this(string.Format("log{0}", DateTime.Now.Ticks))
         {
         }
 
+        /// <summary>
+        /// Instantiates an instance of <see cref="Log"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the Log.</param>
         public Log(string name)
         {
             _listeners = new Dictionary<string, Listener>();
@@ -30,6 +54,10 @@ namespace WaterLogged
             Enabled = true;
         }
 
+        /// <summary>
+        /// Adds a <see cref="Listener"/> to this Log.
+        /// </summary>
+        /// <param name="listener">The Listener to add.</param>
         public void AddListener(Listener listener)
         {
             if (listener.Log != null)
@@ -45,22 +73,40 @@ namespace WaterLogged
             _listeners.Add(listener.Name, listener);
         }
 
+        /// <summary>
+        /// Returns a value indicating if this Log contains a <see cref="Listener"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the Listener to search for.</param>
+        /// <returns></returns>
         public bool ContainsListener(string name)
         {
             return _listeners.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Finds a <see cref="Listener"/> with the specified name and returns it.
+        /// </summary>
+        /// <param name="name">The name of the Listener.</param>
         public Listener GetListener(string name)
         {
             return _listeners[name];
         }
 
+        /// <summary>
+        /// Removes the <see cref="Listener"/> with the specified name from this Log.
+        /// </summary>
+        /// <param name="name">The name of the Listener to remove.</param>
         public void RemoveListener(string name)
         {
             _listeners[name].Log = null;
             _listeners.Remove(name);
         }
 
+        /// <summary>
+        /// Changes a <see cref="Listener"/>'s name.
+        /// </summary>
+        /// <param name="oldName">The name of the Listener whose name to change.</param>
+        /// <param name="newName">The new name of the Listener.</param>
         public void ChangeListenerName(string oldName, string newName)
         {
             var oldListener = _listeners[oldName];
@@ -69,6 +115,10 @@ namespace WaterLogged
         }
 
 
+        /// <summary>
+        /// Adds a <see cref="TemplatedMessageSink"/> to this Log.
+        /// </summary>
+        /// <param name="sink">The sink to add.</param>
         public void AddSink(TemplatedMessageSink sink)
         {
             if (sink.Log != null)
@@ -84,22 +134,40 @@ namespace WaterLogged
             _sinks.Add(sink.Name, sink);
         }
 
+        /// <summary>
+        /// Returns a value indicating if this Log contains a <see cref="TemplatedMessageSink"/> with the specified name.
+        /// </summary>
+        /// <param name="name">The name of the TemplatedMessageSink to search for.</param>
+        /// <returns></returns>
         public bool ContainsSink(string name)
         {
             return _sinks.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Finds a <see cref="TemplatedMessageSink"/> with the specified name and returns it.
+        /// </summary>
+        /// <param name="name">The name of the TemplatedMessageSink.</param>
         public TemplatedMessageSink GetSink(string name)
         {
             return _sinks[name];
         }
 
+        /// <summary>
+        /// Removes the <see cref="TemplatedMessageSink"/> with the specified name from this Log.
+        /// </summary>
+        /// <param name="name">The name of the TemplatedMessageSink to remove.</param>
         public void RemoveSink(string name)
         {
             _sinks[name].Log = null;
             _sinks.Remove(name);
         }
 
+        /// <summary>
+        /// Changes a <see cref="TemplatedMessageSink"/>'s name.
+        /// </summary>
+        /// <param name="oldName">The name of the TemplatedMessageSink whose name to change.</param>
+        /// <param name="newName">The new name of the TemplatedMessageSink.</param>
         public void ChangeSinkName(string oldName, string newName)
         {
             var oldSink = _sinks[oldName];
@@ -110,26 +178,54 @@ namespace WaterLogged
         //********************************************
         // WriteLine
         //********************************************
+
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="arg0">A string.Format argument.</param>
         public void WriteLine(string value, object arg0)
         {
             WriteLine(string.Format(value, arg0));
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
         public void WriteLine(string value, object arg0, object arg1)
         {
             WriteLine(string.Format(value, arg0, arg1));
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
+        /// <param name="arg2">A string.Format argument.</param>
         public void WriteLine(string value, object arg0, object arg1, object arg2)
         {
             WriteLine(string.Format(value, arg0, arg1, arg2));
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="args">An array of string.Format arguments.</param>
         public void WriteLine(string value, params object[] args)
         {
             WriteLine(string.Format(value, args));
         }
 
+        /// <summary>
+        /// Outputs a message followed by a line terminator.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
         public void WriteLine(string value)
         {
             WriteTag(value + Environment.NewLine, "");
@@ -139,26 +235,54 @@ namespace WaterLogged
         //********************************************
         // Write
         //********************************************
+
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format).
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="arg0">A string.Format argument.</param>
         public void Write(string value, object arg0)
         {
             Write(string.Format(value, arg0));
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format).
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
         public void Write(string value, object arg0, object arg1)
         {
             Write(string.Format(value, arg0, arg1));
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format).
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
+        /// <param name="arg2">A string.Format argument.</param>
         public void Write(string value, object arg0, object arg1, object arg2)
         {
             Write(string.Format(value, arg0, arg1, arg2));
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format).
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="args">An array of string.Format arguments.</param>
         public void Write(string value, params object[] args)
         {
             Write(string.Format(value, args));
         }
 
+        /// <summary>
+        /// Outputs a message.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
         public void Write(string value)
         {
             WriteTag(value, "");
@@ -168,26 +292,59 @@ namespace WaterLogged
         //********************************************
         // WriteLineTag
         //********************************************
+
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="arg0">A string.Format argument.</param>
         public void WriteLineTag(string value, string tag, object arg0)
         {
             WriteLineTag(string.Format(value, arg0), tag);
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
         public void WriteLineTag(string value, string tag, object arg0, object arg1)
         {
             WriteLineTag(string.Format(value, arg0, arg1), tag);
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
+        /// <param name="arg2">A string.Format argument.</param>
         public void WriteLineTag(string value, string tag, object arg0, object arg1, object arg2)
         {
             WriteLineTag(string.Format(value, arg0, arg1, arg2), tag);
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) followed by a line terminator using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="args">string.Format arguments.</param>
         public void WriteLineTag(string value, string tag, params object[] args)
         {
             WriteLineTag(string.Format(value, args), tag);
         }
 
+        /// <summary>
+        /// Outputs a message followed by a line terminator using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
         public void WriteLineTag(string value, string tag)
         {
             WriteTag(value + Environment.NewLine, tag);
@@ -197,26 +354,59 @@ namespace WaterLogged
         //********************************************
         // WriteTag
         //********************************************
+
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="arg0">A string.Format argument.</param>
         public void WriteTag(string value, string tag, object arg0)
         {
             WriteTag(string.Format(value, arg0), tag);
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
         public void WriteTag(string value, string tag, object arg0, object arg1)
         {
             WriteTag(string.Format(value, arg0, arg1), tag);
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="arg0">A string.Format argument.</param>
+        /// <param name="arg1">A string.Format argument.</param>
+        /// <param name="arg2">A string.Format argument.</param>
         public void WriteTag(string value, string tag, object arg0, object arg1, object arg2)
         {
             WriteTag(string.Format(value, arg0, arg1, arg2), tag);
         }
 
+        /// <summary>
+        /// Outputs a message (first passing it through string.Format) using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="args">string.Format arguments.</param>
         public void WriteTag(string value, string tag, params object[] args)
         {
             WriteTag(string.Format(value, args), tag);
         }
 
+        /// <summary>
+        /// Outputs a message followed using the specified tag.
+        /// </summary>
+        /// <param name="value">The message to write.</param>
+        /// <param name="tag">The message's tag.</param>
         public void WriteTag(string value, string tag)
         {
             if (!Enabled)
@@ -254,11 +444,30 @@ namespace WaterLogged
         //********************************************
         // WriteObject
         //********************************************
+
+        /// <summary>
+        /// Outputs the specified object as a message. Transforming the object to a friendly-string if possible.
+        /// </summary>
+        /// <param name="value">The input object.</param>
+        /// <param name="argument">An optional argument to pass to an <see cref="ObjectTransformer"/>.</param>
+        /// <remarks>
+        /// If <see cref="WaterLogged.ObjectTransformer"/> has a Transformer set to the input object's type,
+        /// the input object will be transformed into a friendly string through the Transformer.
+        /// If a Transformer can't be resolved in this way; the input object's ToString() will be used.
+        /// </remarks>
         public void WriteObject(object value, object argument = null)
         {
             WriteObjectTag(value, "", argument);
         }
 
+        /// <summary>
+        /// Outputs the specified object as a message. Using the specified
+        /// <see cref="ObjectTransformer"/> to transform the object to a friendly-string.
+        /// </summary>
+        /// <param name="value">The input object.</param>
+        /// <param name="transformer">The <see cref="ObjectTransformer"/> to use to transform
+        /// the input object into a friendly string.</param>
+        /// <param name="argument">An optional argument to pass to the <see cref="ObjectTransformer"/>.</param>
         public void WriteObject(object value, ObjectTransformer transformer, object argument = null)
         {
             WriteObjectTag(value, "", transformer, argument);
@@ -268,6 +477,18 @@ namespace WaterLogged
         //********************************************
         // WriteObjectTag
         //********************************************
+
+        /// <summary>
+        /// Outputs the specified object as a message with the specified tag. Transforming the object to a friendly-string if possible.
+        /// </summary>
+        /// <param name="value">The input object.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="argument">An optional argument to pass to an <see cref="ObjectTransformer"/>.</param>
+        /// <remarks>
+        /// If <see cref="WaterLogged.ObjectTransformer"/> has a Transformer set to the input object's type,
+        /// the input object will be transformed into a friendly string through the Transformer.
+        /// If a Transformer can't be resolved in this way; the input object's ToString() will be used.
+        /// </remarks>
         public void WriteObjectTag(object value, string tag, object argument = null)
         {
             string result = "";
@@ -282,13 +503,32 @@ namespace WaterLogged
             WriteTag(result, tag);
         }
 
+        /// <summary>
+        /// Outputs the specified object as a message with the specified tag. Using the specified
+        /// <see cref="ObjectTransformer"/> to transform the object to a friendly-string.
+        /// </summary>
+        /// <param name="value">The input object.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="transformer">The <see cref="ObjectTransformer"/> to use to transform
+        /// the input object into a friendly string.</param>
+        /// <param name="argument">An optional argument to pass to the <see cref="ObjectTransformer"/>.</param>
         public void WriteObjectTag(object value, string tag, ObjectTransformer transformer, object argument = null)
         {
             WriteTag(transformer.Transform(value, argument), tag);
         }
+        
 
+        //********************************************
+        // WriteStructured
+        //********************************************
 
-
+        /// <summary>
+        /// Outputs a structured message matching the hole names with the first item of each <see cref="Tuple"/> in an array of hole values.
+        /// </summary>
+        /// <param name="template">The template string.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="holeValues">An array of <see cref="Tuple"/> with a length of 2 with the first item
+        /// correlating to a hole name and the second item holding the actual hole value.</param>
         public void WriteStructuredNamed(string template, string tag, params (string, object)[] holeValues)
         {
             if (!Enabled)
@@ -309,12 +549,18 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                        sinkKeyValue.Value.ProcessMessage( message, tag);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Outputs a structured message using an array of hole values.
+        /// </summary>
+        /// <param name="template">The template string.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="holeValues">An array of hole values.</param>
         public void WriteStructured(string template, string tag, params object[] holeValues)
         {
             if (!Enabled)
@@ -335,12 +581,18 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                        sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Outputs a structured message matching the holes with properties and fields in the specified <paramref name="parentObject"/>.
+        /// </summary>
+        /// <param name="template">The template string.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="parentObject">The parent object that is host to hole values.</param>
         public void WriteStructuredParent(string template, string tag, object parentObject)
         {
             if (!Enabled)
@@ -361,12 +613,18 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                        sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Outputs a structured message matching the holes with properties and fields in the specified static type.
+        /// </summary>
+        /// <param name="template">The template string.</param>
+        /// <param name="tag">The message's tag.</param>
+        /// <param name="parentType">The type which contains static values to use for hole values.</param>
         public void WriteStructuredStaticParent(string template, string tag, Type parentType)
         {
             if (!Enabled)
@@ -388,12 +646,17 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                        sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// Outputs a <see cref="StructuredMessage"/> to the log.
+        /// </summary>
+        /// <param name="message">The message to output.</param>
+        /// <param name="tag">The message's tag.</param>
         public void WriteStructuredMessage(StructuredMessage message, string tag)
         {
             if (!Enabled)
@@ -408,7 +671,7 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(this, message, tag);
+                        sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }

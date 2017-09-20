@@ -3,6 +3,7 @@ using System.Globalization;
 
 namespace WaterLogged.Serialization.StringConversion
 {
+    /// <inheritdoc />
     public class NumericConverters : IStringConverter
     {
         public bool SupportsType(Type type)

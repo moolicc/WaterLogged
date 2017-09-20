@@ -5,6 +5,7 @@ using System.Text;
 
 namespace WaterLogged.Serialization.StringConversion
 {
+    /// <inheritdoc />
     public class ArrayConverter : IStringConverter
     {
         public bool SupportsType(Type type)
