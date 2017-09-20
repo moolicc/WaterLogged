@@ -58,7 +58,7 @@ namespace WaterLogged
         /// Adds a <see cref="Listener"/> to this Log.
         /// </summary>
         /// <param name="listener">The Listener to add.</param>
-        public void AddListener(Listener listener)
+        public Log AddListener(Listener listener)
         {
             if (listener.Log != null)
             {
@@ -71,6 +71,7 @@ namespace WaterLogged
             }
             listener.Log = this;
             _listeners.Add(listener.Name, listener);
+            return this;
         }
 
         /// <summary>
@@ -96,10 +97,11 @@ namespace WaterLogged
         /// Removes the <see cref="Listener"/> with the specified name from this Log.
         /// </summary>
         /// <param name="name">The name of the Listener to remove.</param>
-        public void RemoveListener(string name)
+        public Log RemoveListener(string name)
         {
             _listeners[name].Log = null;
             _listeners.Remove(name);
+            return this;
         }
 
         /// <summary>
@@ -107,11 +109,12 @@ namespace WaterLogged
         /// </summary>
         /// <param name="oldName">The name of the Listener whose name to change.</param>
         /// <param name="newName">The new name of the Listener.</param>
-        public void ChangeListenerName(string oldName, string newName)
+        public Log ChangeListenerName(string oldName, string newName)
         {
             var oldListener = _listeners[oldName];
             _listeners.Add(newName, oldListener);
             _listeners.Remove(oldName);
+            return this;
         }
 
 
@@ -119,7 +122,7 @@ namespace WaterLogged
         /// Adds a <see cref="TemplatedMessageSink"/> to this Log.
         /// </summary>
         /// <param name="sink">The sink to add.</param>
-        public void AddSink(TemplatedMessageSink sink)
+        public Log AddSink(TemplatedMessageSink sink)
         {
             if (sink.Log != null)
             {
@@ -132,6 +135,7 @@ namespace WaterLogged
             }
             sink.Log = this;
             _sinks.Add(sink.Name, sink);
+            return this;
         }
 
         /// <summary>
@@ -157,10 +161,11 @@ namespace WaterLogged
         /// Removes the <see cref="TemplatedMessageSink"/> with the specified name from this Log.
         /// </summary>
         /// <param name="name">The name of the TemplatedMessageSink to remove.</param>
-        public void RemoveSink(string name)
+        public Log RemoveSink(string name)
         {
             _sinks[name].Log = null;
             _sinks.Remove(name);
+            return this;
         }
 
         /// <summary>
@@ -168,11 +173,12 @@ namespace WaterLogged
         /// </summary>
         /// <param name="oldName">The name of the TemplatedMessageSink whose name to change.</param>
         /// <param name="newName">The new name of the TemplatedMessageSink.</param>
-        public void ChangeSinkName(string oldName, string newName)
+        public Log ChangeSinkName(string oldName, string newName)
         {
             var oldSink = _sinks[oldName];
             _sinks.Add(newName, oldSink);
             _sinks.Remove(oldName);
+            return this;
         }
 
         //********************************************
