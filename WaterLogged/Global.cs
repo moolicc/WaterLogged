@@ -34,7 +34,7 @@ namespace WaterLogged
             }
         }
         /// <summary>
-        /// A collections of Logs accessible by any type of key.
+        /// A collection of Logs accessible by any type of key.
         /// </summary>
         /// <remarks>
         /// This is so that you can use an enum, for example, to access specific logs.
