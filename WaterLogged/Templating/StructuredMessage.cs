@@ -13,12 +13,12 @@ namespace WaterLogged.Templating
         public DateTime CreationDate { get; private set; }
 
         public StructuredMessage()
-            : this("", "entry")
+            : this("", "LogEntry")
         {
         }
 
         public StructuredMessage(string template)
-            : this(template, "entry")
+            : this(template, "LogEntry")
         {
         }
 
