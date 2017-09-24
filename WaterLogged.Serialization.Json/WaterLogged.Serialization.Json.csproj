@@ -10,6 +10,7 @@
     <RepositoryUrl>https://github.com/Icecream-Burglar/WaterLogged</RepositoryUrl>
     <RepositoryType>Dependency</RepositoryType>
     <PackageTags>logs logging logger log serialize deserialize serialization deserialization json</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
