@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Icecream-Burglar</Authors>
+    <Description>This package contains the necessary components to read logging components from json configuration files.</Description>
+    <Copyright>Copyright (c) 2017 Icecream-Burglar</Copyright>
+    <PackageLicenseUrl>https://github.com/Icecream-Burglar/WaterLogged/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Icecream-Burglar/WaterLogged</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Icecream-Burglar/WaterLogged</RepositoryUrl>
+    <RepositoryType>Dependency</RepositoryType>
+    <PackageTags>logs logging logger log serialize deserialize serialization deserialization json</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
