@@ -2,6 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Icecream-Burglar</Authors>
+    <PackageId>WaterLogged</PackageId>
+    <Description>This package contains the logging infrastructure for WaterLogged.</Description>
+    <PackageLicenseUrl>https://github.com/Icecream-Burglar/WaterLogged/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Icecream-Burglar/WaterLogged</PackageProjectUrl>
+    <Copyright>Copyright (c) 2017 Icecream-Burglar</Copyright>
+    <RepositoryUrl>https://github.com/Icecream-Burglar/WaterLogged</RepositoryUrl>
+    <PackageTags>log logger logs logging</PackageTags>
+    <RepositoryType>Dependency</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>

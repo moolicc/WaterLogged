@@ -2,6 +2,17 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Icecream-Burglar</Authors>
+    <Company>WaterLogged</Company>
+    <Product>WaterLogged</Product>
+    <Description>This package contains the serialization framework for serializing WaterLogged logging components.</Description>
+    <Copyright>Copyright (c) 2017 Icecream-Burglar</Copyright>
+    <PackageLicenseUrl>https://github.com/Icecream-Burglar/WaterLogged/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/Icecream-Burglar/WaterLogged</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Icecream-Burglar/WaterLogged</RepositoryUrl>
+    <RepositoryType>Dependency</RepositoryType>
+    <PackageTags>logs logging logger log serialize deserialize serialization deserialization</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
