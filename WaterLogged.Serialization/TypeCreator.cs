@@ -57,13 +57,16 @@ namespace WaterLogged.Serialization
                 throw new TypeLoadException(string.Format("Failed to create object of type '{0}'. See the inner-exception for details.", TypeName), e);
             }
 
-            var properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public);
-            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic);
-            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public);
+            var properties = type.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            var methods = type.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var memberValue in MemberValues)
             {
-                var property = properties.FirstOrDefault(p => string.Equals(p.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
+                var property = properties.FirstOrDefault(p =>
+                {
+                    return string.Equals(p.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase);
+                });
                 if (property != null)
                 {
                     if (property.PropertyType == typeof(List<object>))
@@ -104,7 +107,10 @@ namespace WaterLogged.Serialization
 
                 var method =
                     methods.FirstOrDefault(
-                        m => string.Equals(m.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase));
+                        m =>
+                        {
+                            return string.Equals(m.Name, memberValue.Key, StringComparison.OrdinalIgnoreCase);
+                        });
                 if (method != null)
                 {
                     var methodParams = method.GetParameters();
