@@ -1,4 +1,4 @@
-﻿namespace WaterLogged.Parsing.Expressions
+﻿namespace WaterLogged.Parsing.Formatter.Expressions
 {
     /// <summary>
     /// Implements an expression that contains plain text.

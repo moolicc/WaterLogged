@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace WaterLogged.Parsing.Expressions
+namespace WaterLogged.Parsing.Formatter.Expressions
 {
     /// <summary>
     /// Implements an expression to evaluate mathematical and boolean expressions using NCalc in the form '#{1 + 1}'.

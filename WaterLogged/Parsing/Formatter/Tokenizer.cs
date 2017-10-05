@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WaterLogged.Parsing.Tokens;
+using WaterLogged.Parsing.Formatter.Tokens;
 
-namespace WaterLogged.Parsing
+namespace WaterLogged.Parsing.Formatter
 {
     /// <summary>
-    /// Transforms an input string into an array of <see cref="WaterLogged.Parsing.Tokens.Token"/>.
+    /// Transforms an input string into an array of <see cref="WaterLogged.Parsing.Formatter.Tokens.Token"/>.
     /// </summary>
     public class Tokenizer
     {

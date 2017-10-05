@@ -1,4 +1,4 @@
-﻿namespace WaterLogged.Parsing.Expressions
+﻿namespace WaterLogged.Parsing.Formatter.Expressions
 {
     /// <summary>
     /// Represents an expression parsed from the Formatter evaluator.

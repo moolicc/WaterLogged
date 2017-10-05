@@ -1,4 +1,4 @@
-﻿namespace WaterLogged.Parsing.Expressions
+﻿namespace WaterLogged.Parsing.Formatter.Expressions
 {
     /// <summary>
     /// Implements the combination of two expressions. Evaluates to the form 'a + b'.

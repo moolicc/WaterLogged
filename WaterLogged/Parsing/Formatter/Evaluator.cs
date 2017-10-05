@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace WaterLogged.Parsing
+namespace WaterLogged.Parsing.Formatter
 {
     /// <summary>
     /// Evaluates a series of expressions parsed from a format string.

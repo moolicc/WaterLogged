@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using WaterLogged.Parsing.Expressions;
-using WaterLogged.Parsing.Tokens;
+using WaterLogged.Parsing.Formatter.Expressions;
+using WaterLogged.Parsing.Formatter.Tokens;
 
-namespace WaterLogged.Parsing
+namespace WaterLogged.Parsing.Formatter
 {
     /// <summary>
-    /// Parses a format string into an <see cref="WaterLogged.Parsing.Expressions.IExpression"/> array.
+    /// Parses a format string into an <see cref="WaterLogged.Parsing.Formatter.Expressions.IExpression"/> array.
     /// </summary>
     public class Parser
     {

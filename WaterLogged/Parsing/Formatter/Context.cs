@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WaterLogged.Parsing
+namespace WaterLogged.Parsing.Formatter
 {
     /// <summary>
     /// Represents a function resolver for the formatter evaluator.

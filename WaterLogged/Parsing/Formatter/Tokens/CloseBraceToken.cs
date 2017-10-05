@@ -1,4 +1,4 @@
-﻿namespace WaterLogged.Parsing.Tokens
+﻿namespace WaterLogged.Parsing.Formatter.Tokens
 {
     /// <summary>
     /// Represents a '}' token.

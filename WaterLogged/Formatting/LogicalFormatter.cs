@@ -5,8 +5,8 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using WaterLogged.Parsing;
-using WaterLogged.Parsing.Expressions;
+using WaterLogged.Parsing.Formatter;
+using WaterLogged.Parsing.Formatter.Expressions;
 
 namespace WaterLogged.Formatting
 {

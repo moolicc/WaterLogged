@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace WaterLogged.Parsing.Expressions
+namespace WaterLogged.Parsing.Formatter.Expressions
 {
     /// <summary>
     /// Implements an expression which evaluates function calls in the form '${funcname:param1,param2}'.
