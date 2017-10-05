@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.10
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged", "WaterLogged\WaterLogged.csproj", "{4CFE636A-CBED-4D2C-B824-08946BD932DE}"
 EndProject
@@ -11,9 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example", "Example\Example.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Serialization.Xml", "WaterLogged.Serialization.Xml\WaterLogged.Serialization.Xml.csproj", "{77C01114-023E-4FF6-9CC2-B79B2432860E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Supplement", "WaterLogged.Supplement\WaterLogged.Supplement.csproj", "{6AA6859E-3BA2-48A6-B557-AF531E3B415D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterLogged.Serialization.Json", "WaterLogged.Serialization.Json\WaterLogged.Serialization.Json.csproj", "{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Serialization.Json", "WaterLogged.Serialization.Json\WaterLogged.Serialization.Json.csproj", "{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,10 +35,6 @@ Global
 		{77C01114-023E-4FF6-9CC2-B79B2432860E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77C01114-023E-4FF6-9CC2-B79B2432860E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77C01114-023E-4FF6-9CC2-B79B2432860E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6AA6859E-3BA2-48A6-B557-AF531E3B415D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B2EB0BD-98EA-4366-92D1-C54B482FD3B6}.Release|Any CPU.ActiveCfg = Release|Any CPU

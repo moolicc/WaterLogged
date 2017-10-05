@@ -8,7 +8,6 @@
   <ItemGroup>
     <ProjectReference Include="..\WaterLogged.Serialization.Json\WaterLogged.Serialization.Json.csproj" />
     <ProjectReference Include="..\WaterLogged.Serialization\WaterLogged.Serialization.csproj" />
-    <ProjectReference Include="..\WaterLogged.Supplement\WaterLogged.Supplement.csproj" />
     <ProjectReference Include="..\WaterLogged\WaterLogged.csproj" />
   </ItemGroup>
 

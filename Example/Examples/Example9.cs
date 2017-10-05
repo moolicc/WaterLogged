@@ -5,7 +5,6 @@ using WaterLogged.Formatting;
 using WaterLogged.Listeners;
 using WaterLogged.Serialization.Json;
 using WaterLogged.Templating;
-using WaterLogged.Supplement;
 
 namespace Example.Examples
 {
