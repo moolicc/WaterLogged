@@ -13,5 +13,10 @@ namespace WaterLogged.Parsing.Templater.Tokens
             Text = text;
             return this;
         }
+
+        public override string BuildString()
+        {
+            return Text;
+        }
     }
 }

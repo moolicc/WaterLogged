@@ -15,7 +15,8 @@ namespace Example.Examples
         
         public Example7()
         {
-            _log.AddSink(new TemplateRedirectSink());
+            //TODO:
+            //_log.AddSink(new TemplateRedirectSink());
             //_log.AddSink(new JsonFileTemplateSink("log.json"));
             _log.AddListener(new StandardOut());
         }

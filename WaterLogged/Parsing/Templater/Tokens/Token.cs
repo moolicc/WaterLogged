@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WaterLogged.Parsing.Templater.Tokens
 {
-    public class Token
+    public abstract class Token
     {
         public int Index { get; private set; }
 
@@ -13,5 +13,7 @@ namespace WaterLogged.Parsing.Templater.Tokens
             Index = index;
             return this;
         }
+
+        public abstract string BuildString();
     }
 }

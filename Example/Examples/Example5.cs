@@ -13,7 +13,8 @@ namespace Example.Examples
 
         public Example5()
         {
-            _log.AddSink(new TemplateRedirectSink());
+            //TODO:
+            //_log.AddSink(new TemplateRedirectSink());
             _log.AddListener(new StandardOut());
         }
 

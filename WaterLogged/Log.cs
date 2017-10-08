@@ -546,7 +546,8 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = TemplateProcessor.ProcessNamedTemplate(template, holeValues);
+            //TODO:
+            //var message = TemplateProcessor.ProcessNamedTemplate(template, holeValues);
 
             lock (_sinks)
             {
@@ -556,7 +557,8 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage( message, tag);
+                        //TODO:
+                        //sinkKeyValue.Value.ProcessMessage( message, tag);
                     }
                 }
             }
@@ -578,7 +580,8 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = TemplateProcessor.ProcessTemplate(template, holeValues);
+            //TODO:
+            //var message = TemplateProcessor.ProcessTemplate(template, holeValues);
 
             lock (_sinks)
             {
@@ -588,7 +591,8 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
+                        //TODO:
+                        //sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }
@@ -610,7 +614,8 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = TemplateProcessor.ProcessParentedTemplate(template, parentObject);
+            //TODO:
+            //var message = TemplateProcessor.ProcessParentedTemplate(template, parentObject);
 
             lock (_sinks)
             {
@@ -620,7 +625,8 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
+                        //TODO:
+                       // sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }
@@ -642,8 +648,9 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            
-            var message = TemplateProcessor.ProcessParentedTemplate(template, parentType);
+
+            //TODO:
+            //var message = TemplateProcessor.ProcessParentedTemplate(template, parentType);
 
             lock (_sinks)
             {
@@ -653,7 +660,8 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
+                        //TODO:
+                        //sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }

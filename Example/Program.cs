@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Example.Examples;
+using WaterLogged.Templating;
 
 namespace Example
 {
@@ -23,7 +24,11 @@ namespace Example
             _examples.Add(new Example9());
 
             _selectedExample = -1;
-            SelectExample();
+            //SelectExample();
+
+
+            var m = WaterLogged.Templating.TemplateProcessor.BuildMessage("Hello {0}! You are {1:00} years old", "bill", 18);
+            string s = TemplateProcessor.BuildString(m);
 
             Console.WriteLine("Press the ANY key to continue...");
             Console.ReadLine();

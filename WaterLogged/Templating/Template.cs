@@ -40,17 +40,40 @@ namespace WaterLogged.Templating
             }
         }
 
+        public bool NamedProperties { get; private set; }
 
         private Token[] _templateTokens;
 
         public Template(IEnumerable<Token> tokens)
         {
-            _templateTokens = tokens.ToArray();
+            var enumerable = tokens as Token[] ?? tokens.ToArray();
+            _templateTokens = enumerable.ToArray();
+            if (enumerable.FirstOrDefault(t => t is PropertyHoleToken) is PropertyHoleToken token)
+            {
+                if (int.TryParse(token.PropertyName, out _))
+                {
+                    NamedProperties = false;
+                }
+                else
+                {
+                    NamedProperties = true;
+                }
+            }
         }
 
         public Token[] GetTokens()
         {
             return _templateTokens;
+        }
+
+        public string BuildSource()
+        {
+            StringBuilder builder = new StringBuilder();
+            foreach (var token in _templateTokens)
+            {
+                builder.Append(token.BuildString());
+            }
+            return builder.ToString();
         }
     }
 }

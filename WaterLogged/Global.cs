@@ -38,7 +38,7 @@ namespace WaterLogged
         /// </summary>
         /// <remarks>
         /// This is so that you can use an enum, for example, to access specific logs.
-        /// Therefore, you could have a Logs enum with items like: "Debug", "Error" and "Network", and map these enum values to specific <see cref="Log"/>s.
+        /// Therefore, you could have a Logs enum with items like: "Debug", "Error" and "Network", and map these enum values to specific <see cref="Log"/> instances.
         /// </remarks>
         public static Dictionary<object, Log> GlobalLogs { get; private set; }
 

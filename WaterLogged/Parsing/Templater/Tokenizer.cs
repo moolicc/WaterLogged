@@ -47,8 +47,14 @@ namespace WaterLogged.Parsing.Templater
             {
                 if (nextChar != '{')
                 {
+                    Pull();
                     return ParseProperty().SetIndex(i);
                 }
+            }
+            if (nextChar == '\0')
+            {
+                _index++;
+                return new LiteralToken().SetText(curChar.ToString()).SetIndex(i);
             }
             return ParseLiteral().SetIndex(i);
         }
