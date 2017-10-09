@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WaterLogged.Templating
 {
-    public class StructuredMessage
+    public struct StructuredMessage
     {
         public string TemplateSource { get; private set; }
         public Template ParsedTemplate { get; private set; }

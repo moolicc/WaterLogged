@@ -7,7 +7,7 @@ using WaterLogged.Parsing.Templater.Tokens;
 
 namespace WaterLogged.Templating
 {
-    public class Template
+    public struct Template
     {
         private static Dictionary<string, Template> _templateCache;
 
@@ -46,15 +46,14 @@ namespace WaterLogged.Templating
 
         public Template(IEnumerable<Token> tokens)
         {
+            NamedProperties = false;
+
             var enumerable = tokens as Token[] ?? tokens.ToArray();
             _templateTokens = enumerable.ToArray();
+
             if (enumerable.FirstOrDefault(t => t is PropertyHoleToken) is PropertyHoleToken token)
             {
-                if (int.TryParse(token.PropertyName, out _))
-                {
-                    NamedProperties = false;
-                }
-                else
+                if (!int.TryParse(token.PropertyName, out _))
                 {
                     NamedProperties = true;
                 }
