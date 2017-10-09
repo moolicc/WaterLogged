@@ -10,8 +10,7 @@ namespace Example.Examples
     {
         public override string IntroText => "This example demonstrates logical log usage. It echoes back input but takes advantage of logic-based formatting.";
         public override string Name => "Logical formatting usage";
-
-        private bool _flag;
+        
 
         public Example4()
         {
