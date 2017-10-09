@@ -18,7 +18,6 @@ namespace WaterLogged.Serialization
 
         public object Create()
         {
-            //TODO: Support for non-default ctor usage
             //TODO: Support for Dictionaries
 
             Type type = null;

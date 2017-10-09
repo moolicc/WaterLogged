@@ -17,8 +17,7 @@ namespace Example.Examples
 
         public Example6()
         {
-            //TODO:
-            //_log.AddSink(new TemplateRedirectSink());
+            _log.AddSink(new TemplateRedirectSink());
             _log.AddListener(new StandardOut());
             _log.Formatter = new LogicalFormatter();
             _tagSwitch = false;

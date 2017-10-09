@@ -15,9 +15,8 @@ namespace Example.Examples
         
         public Example8()
         {
-            //TODO:
-            //_log.AddSink(new TemplateRedirectSink());
-            //_log.AddSink(new JsonFileTemplateSink("log.json"));
+            _log.AddSink(new TemplateRedirectSink());
+            _log.AddSink(new JsonFileTemplateSink("log.json"));
             _log.AddListener(new StandardOut());
             _log.AddListener(new EmailListener(host: "localhost", fromAddress: "testing@Waterlooged.com", ssl: false, port: 25, recipients: new List<string> { "testing@test.com" }));
         }
