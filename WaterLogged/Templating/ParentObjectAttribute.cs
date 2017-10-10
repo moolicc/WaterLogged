@@ -4,19 +4,16 @@ using System.Text;
 
 namespace WaterLogged.Templating
 {
-    [AttributeUsage(AttributeTargets.Class, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = true, AllowMultiple = false)]
     public sealed class ParentObjectAttribute : Attribute
     {
-        private readonly ParentObjectResolveRules _rules;
+        public ParentObjectRules Rules { get => _rules; }
 
-        public ParentObjectAttribute(ParentObjectResolveRules rules)
+        private ParentObjectRules _rules;
+
+        public ParentObjectAttribute(ParentObjectRules rules)
         {
             _rules = rules;
-        }
-
-        public ParentObjectResolveRules GetRules()
-        {
-            return _rules;
         }
     }
 }

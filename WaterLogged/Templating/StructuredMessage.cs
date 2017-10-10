@@ -4,78 +4,19 @@ using System.Text;
 
 namespace WaterLogged.Templating
 {
-    public class StructuredMessage
+    public struct StructuredMessage
     {
-        public string EntryName { get; set; }
-        public string Template { get; set; }
-        public Dictionary<Hole, HoleValue> Values { get; private set; }
+        public string TemplateSource { get; private set; }
+        public Template ParsedTemplate { get; private set; }
+        public Dictionary<int, PropertyValue> TemplateValues { get; private set; }
         public Dictionary<string, object> ContextValues { get; private set; }
-        public DateTime CreationDate { get; private set; }
 
-        public StructuredMessage()
-            : this("", "LogEntry")
+        public StructuredMessage(string templateSource, Template template)
         {
-        }
-
-        public StructuredMessage(string template)
-            : this(template, "LogEntry")
-        {
-        }
-
-        public StructuredMessage(string template, string entryName)
-        {
-            EntryName = entryName;
-            Template = template;
-            Values = new Dictionary<Hole, HoleValue>();
+            TemplateSource = templateSource;
+            ParsedTemplate = template;
+            TemplateValues = new Dictionary<int, PropertyValue>();
             ContextValues = new Dictionary<string, object>();
-            CreationDate = DateTime.Now;
-        }
-
-        public StructuredMessage Write(Log log)
-        {
-            return Write(log, "");
-        }
-
-        public StructuredMessage Write(Log log, string tag)
-        {
-            log.WriteStructuredMessage(this, tag);
-            return this;
-        }
-
-        public StructuredMessage WithEntryName(string entryName)
-        {
-            EntryName = entryName;
-            return this;
-        }
-
-        public StructuredMessage WithTemplate(string template)
-        {
-            Template = template;
-            return this;
-        }
-
-        public StructuredMessage WithContext(string name, object value)
-        {
-            ContextValues.Add(name, value);
-            return this;
-        }
-
-        public StructuredMessage WithContext(params (string name, object value)[] values)
-        {
-            foreach (var value in values)
-            {
-                ContextValues.Add(value.name, value.value);
-            }
-            return this;
-        }
-
-        public StructuredMessage WithContext(Dictionary<string, object> values)
-        {
-            foreach (var value in values)
-            {
-                ContextValues.Add(value.Key, value.Value);
-            }
-            return this;
         }
     }
 }

@@ -1,312 +1,209 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
+using WaterLogged.Parsing.Templater.Tokens;
 
 namespace WaterLogged.Templating
 {
     public static class TemplateProcessor
     {
-        public static StructuredMessage ProcessTemplate(string template, params object[] holeValues)
+        public static StructuredMessage BuildMessage(string templateSource, params object[] values)
         {
-            var message = new StructuredMessage(template);
-            var holes = ProcessHoles(template);
+            return BuildMessage(Template.FromTemplateCache(templateSource), templateSource, values);
+        }
 
-            for (var i = 0; i < holes.Length; i++)
+        public static StructuredMessage BuildMessage(Template template, params object[] values)
+        {
+            return BuildMessage(template, template.BuildSource(), values);
+        }
+
+        public static StructuredMessage BuildMessage(Template template, string templateSource, params object[] values)
+        {
+            Dictionary<string, int> indices = new Dictionary<string, int>();
+            int valuesIndex = 0;
+            StructuredMessage message = new StructuredMessage(templateSource, template);
+
+            var tokens = template.GetTokens();
+            for (var i = 0; i < tokens.Length; i++)
             {
-                var hole = holes[i];
-                if (hole.Id.IdType == HoleIdTypes.Positional)
+                var token = tokens[i];
+                if (token is PropertyHoleToken propertyToken)
                 {
-                    if (holeValues.Length > hole.Id.PositionalId)
+                    if (!indices.ContainsKey(propertyToken.PropertyName))
                     {
-                        message.Values.Add(hole, new HoleValue(hole, holeValues[hole.Id.PositionalId]));
-                    }
-                    else
-                    {
-                        message.Values.Add(hole, new HoleValue(hole, hole.ToString()));
-                    }
-                }
-                else
-                {
-                    if (holeValues.Length > i)
-                    {
-                        message.Values.Add(hole, new HoleValue(hole, holeValues[hole.HoleIndex]));
-                    }
-                    else
-                    {
-                        message.Values.Add(hole, new HoleValue(hole, hole.ToString()));
-                    }
-                }
-            }
-
-            return message;
-        }
-
-        public static StructuredMessage ProcessParentedTemplate(string template, object parentObject)
-        {
-            return ProcessParentedTemplate(template, parentObject, parentObject.GetType());
-        }
-
-        public static StructuredMessage ProcessParentedTemplate<T>(string template, T parentObject)
-        {
-            return ProcessParentedTemplate(template, parentObject, parentObject.GetType());
-        }
-
-        public static StructuredMessage ProcessParentedTemplate(string template, Type parentType)
-        {
-            return ProcessParentedTemplate(template, null, parentType);
-        }
-
-        public static StructuredMessage ProcessParentedTemplate<T>(string template)
-        {
-            return ProcessParentedTemplate(template, null, typeof(T));
-        }
-
-        public static StructuredMessage ProcessNamedTemplate(string template, params (string, object)[] holeValues)
-        {
-            var message = new StructuredMessage(template);
-            var holes = ProcessHoles(template);
-            List<int> usedIndices = new List<int>();
-
-            foreach (var hole in holes)
-            {
-                if (hole.Id.IdType == HoleIdTypes.Positional)
-                {
-                    if (holeValues.Length > hole.Id.PositionalId)
-                    {
-                        message.Values.Add(hole, new HoleValue(hole, holeValues[hole.Id.PositionalId].Item2));
-                    }
-                    else
-                    {
-                        message.Values.Add(hole, new HoleValue(hole, hole.ToString()));
-                    }
-                }
-                else
-                {
-                    bool itemFound = false;
-                    for (var i = 0; i < holeValues.Length; i++)
-                    {
-                        var holeValue = holeValues[i];
-                        if (holeValue.Item1 == hole.Id.NamedId && !usedIndices.Contains(i))
+                        if (valuesIndex >= values.Length)
                         {
-                            message.Values.Add(hole, new HoleValue(hole, holeValue.Item2));
-                            itemFound = true;
-                            usedIndices.Add(i);
-                            break;
+                            continue;
                         }
+                        indices.Add(propertyToken.PropertyName, valuesIndex);
+                        message.TemplateValues.Add(i, new PropertyValue(values[valuesIndex], propertyToken.GetModifier()));
+                        valuesIndex++;
                     }
-                    if (!itemFound)
+                    else
                     {
-                        message.Values.Add(hole, new HoleValue(hole, hole.ToString()));
+                        var valueIndex = indices[propertyToken.PropertyName];
+                        if (valueIndex >= values.Length)
+                        {
+                            continue;
+                        }
+                        message.TemplateValues.Add(i, new PropertyValue(values[valueIndex], propertyToken.GetModifier()));
                     }
-                }
-            }
-
-            for (int i = 0; i < holeValues.Length; i++)
-            {
-                if (!usedIndices.Contains(i))
-                {
-                    var value = holeValues[i];
-                    message.ContextValues.Add(value.Item1, value.Item2);
                 }
             }
 
             return message;
         }
-         
 
-        public static Hole[] ProcessHoles(string template)
+
+        public static StructuredMessage BuildNamedMessage(string templateSource,
+            params (string name, object val)[] values)
         {
-            List<Hole> holes = new List<Hole>();
-            for (int i = 0; i < template.Length; i++)
-            {
-                char curChar = template[i];
-                char nextChar = '\0';
-                if (i + 1 < template.Length)
-                {
-                    nextChar = template[i + 1];
-                }
-                if (curChar == '{' && nextChar != '{')
-                {
-                    var hole = ProcessHole(template, i + 1, out var newIndex);
-                    hole.HoleIndex = holes.Count;
-                    holes.Add(hole);
-                    i = newIndex;
-                }
-                else if (curChar == '{' && nextChar == '{')
-                {
-                    i++;
-                }
-            }
-            return holes.ToArray();
+            return BuildNamedMessage(Template.FromTemplateCache(templateSource), templateSource, values);
         }
 
-
-        public static string ProcessMessage(StructuredMessage message)
+        public static StructuredMessage BuildNamedMessage(Template template,
+            params (string name, object val)[] values)
         {
-            StringBuilder builder = new StringBuilder();
-
-            for (int i = 0; i < message.Template.Length; i++)
-            {
-                if (message.Template[i] == '{')
-                {
-                    var holeValue = message.Values.FirstOrDefault(k => k.Key.TemplateStartIndex == i).Value;
-                    if (holeValue != null)
-                    {
-                        builder.AppendFormat("{0:" + holeValue.Hole.Suffix + "}", holeValue.Value);
-                        i = holeValue.Hole.TemplateEndIndex;
-                        continue;
-                    }
-                }
-                builder.Append(message.Template[i]);
-            }
-
-            return builder.ToString();
+            return BuildNamedMessage(template, template.BuildSource(), values);
         }
 
-
-        private static StructuredMessage ProcessParentedTemplate(string template, object parentObject, Type type)
+        public static StructuredMessage BuildNamedMessage(Template template, string templateSource, params (string name, object val)[] values)
         {
-            var parentAttrib = type.GetTypeInfo().GetCustomAttribute<ParentObjectAttribute>();
-            if (parentAttrib == null)
-            {
-                parentAttrib = new ParentObjectAttribute(ParentObjectResolveRules.All);
-            }
+            StructuredMessage message = new StructuredMessage(templateSource, template);
 
-            var bindingFlags = BindingFlags.Public | BindingFlags.NonPublic;
-            if (parentObject == null)
+            var tokens = template.GetTokens();
+            for (var i = 0; i < tokens.Length; i++)
             {
-                bindingFlags |= BindingFlags.Static;
-            }
-            else
-            {
-                bindingFlags |= BindingFlags.Instance;
-            }
-            List<(string, object)> values = new List<(string, object)>();
-            foreach (var propertyInfo in type.GetProperties())
-            {
-                var attrib = propertyInfo.GetCustomAttribute<ParentObjectValueAttribute>();
-                if (attrib != null)
+                var token = tokens[i];
+                if (token is PropertyHoleToken propertyToken)
                 {
-                    if (attrib.GetInclusion() == ParentObjectValueInclusion.Ignore)
+                    try
                     {
-                        continue;
+                        var valueItem = values.First(v => v.name == propertyToken.PropertyName);
+                        message.TemplateValues.Add(i, new PropertyValue(valueItem.val, propertyToken.GetModifier()));
                     }
-                    else
+                    catch
                     {
-                        values.Add((propertyInfo.Name, propertyInfo.GetValue(parentObject)));
-                        break;
                     }
                 }
-                if (!propertyInfo.CanWrite && (parentAttrib.GetRules() & ParentObjectResolveRules.ReadonlyProperties) == 0)
-                {
-                    continue;
-                }
-                if ((parentAttrib.GetRules() & ParentObjectResolveRules.PrivateProperties) == 0 && propertyInfo.GetGetMethod(true).IsPrivate)
-                {
-                    continue;
-                }
-                if ((parentAttrib.GetRules() & ParentObjectResolveRules.PublicProperties) == 0 && propertyInfo.GetGetMethod(true).IsPublic)
-                {
-                    continue;
-                }
-                values.Add((propertyInfo.Name, propertyInfo.GetValue(parentObject)));
             }
 
-            foreach (var fieldInfo in type.GetFields(bindingFlags))
-            {
-                var attrib = fieldInfo.GetCustomAttribute<ParentObjectValueAttribute>();
-                if (attrib != null)
-                {
-                    if (attrib.GetInclusion() == ParentObjectValueInclusion.Ignore)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        values.Add((fieldInfo.Name, fieldInfo.GetValue(parentObject)));
-                        break;
-                    }
-                }
-                if (fieldInfo.IsInitOnly && (parentAttrib.GetRules() & ParentObjectResolveRules.ReadonlyProperties) == 0)
-                {
-                    continue;
-                }
-                if ((parentAttrib.GetRules() & ParentObjectResolveRules.PrivateProperties) == 0 && fieldInfo.IsPrivate)
-                {
-                    continue;
-                }
-                if ((parentAttrib.GetRules() & ParentObjectResolveRules.PublicProperties) == 0 && fieldInfo.IsPublic)
-                {
-                    continue;
-                }
-                values.Add((fieldInfo.Name, fieldInfo.GetValue(parentObject)));
-            }
-
-            return ProcessNamedTemplate(template, values.ToArray());
-        }
-
-        private static Hole ProcessHole(string template, int index, out int newIndex)
-        {
-            newIndex = -1;
-            HoleId id = null;
-            HolePrefix prefix = HolePrefix.None;
-            string suffix = "";
-
-            string name = "";
-            bool parsingSuffix = false;
-            for (int i = index; i < template.Length; i++)
-            {
-                char curChar = template[i];
-                char nextChar = '\0';
-                if (i + 1 < template.Length)
-                {
-                    nextChar = template[i + 1];
-                }
-                if (i == index && curChar == '$')
-                {
-                    prefix = HolePrefix.Stringification;
-                    continue;
-                }
-                if (i == index && curChar == '@')
-                {
-                    prefix = HolePrefix.Destructuring;
-                    continue;
-                }
-                if (curChar == ':')
-                {
-                    parsingSuffix = true;
-                    continue;
-                }
-                if (parsingSuffix)
-                {
-                    suffix += curChar;
-                    continue;
-                }
-                if (curChar == '}')
-                {
-                    newIndex = i;
-                    break;
-                }
-                name += curChar;
-            }
-
-            if (int.TryParse(name, out var result))
-            {
-                id = new HoleId(result);
-            }
-            else
-            {
-                id = new HoleId(name);
-            }
-
-            var hole = new Hole(id, prefix, suffix);
-            hole.TemplateStartIndex = index - 1;
-            hole.TemplateEndIndex = newIndex;
-            return hole;
+            return message;
         }
         
+
+        public static StructuredMessage BuildParentMessage(string templateSource, object parentObject)
+        {
+            return BuildParentMessage(Template.FromTemplateCache(templateSource), templateSource, parentObject);
+        }
+
+        public static StructuredMessage BuildParentMessage(Template template, object parentObject)
+        {
+            return BuildParentMessage(template, template.BuildSource(), parentObject);
+        }
+
+        public static StructuredMessage BuildParentMessage(Template template, string templateSource,
+            object parentObject)
+        {
+            List<(string, object)> values = new List<(string, object)>();
+
+            Type parentType = parentObject.GetType();
+            ParentObjectAttribute parentAttrib = parentType.GetTypeInfo().GetCustomAttribute<ParentObjectAttribute>();
+            if (parentAttrib == null)
+            {
+                parentAttrib = new ParentObjectAttribute(ParentObjectRules.All);
+            }
+
+            BindingFlags bindingFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic;
+            
+            foreach (var property in parentType.GetProperties(bindingFlags))
+            {
+                bool forceInclude = false;
+                var attrib = property.GetCustomAttribute<IncludeValueAttribute>();
+                if (attrib != null)
+                {
+                    if (!attrib.Value)
+                    {
+                        continue;
+                    }
+                    forceInclude = attrib.Value;
+                }
+                if (!forceInclude && !parentAttrib.Rules.HasFlag(ParentObjectRules.PublicProperties) && property.GetGetMethod().IsPublic)
+                {
+                    continue;
+                }
+                if (!forceInclude && !parentAttrib.Rules.HasFlag(ParentObjectRules.PrivateProperties) && !property.GetGetMethod().IsPublic)
+                {
+                    continue;
+                }
+                if (!forceInclude && !property.CanWrite && !parentAttrib.Rules.HasFlag(ParentObjectRules.ReadonlyProperties))
+                {
+                    continue;
+                }
+                values.Add((property.Name, property.GetValue(parentObject)));
+            }
+            
+            foreach (var field in parentType.GetFields(bindingFlags))
+            {
+                bool forceInclude = false;
+                var attrib = field.GetCustomAttribute<IncludeValueAttribute>();
+                if (attrib != null)
+                {
+                    if (!attrib.Value)
+                    {
+                        continue;
+                    }
+                    forceInclude = attrib.Value;
+                }
+                if (!forceInclude && !parentAttrib.Rules.HasFlag(ParentObjectRules.PublicFields) && field.IsPublic)
+                {
+                    continue;
+                }
+                if (!forceInclude && !parentAttrib.Rules.HasFlag(ParentObjectRules.PrivateProperties) && !field.IsPublic)
+                {
+                    continue;
+                }
+
+                values.Add((field.Name, field.GetValue(parentObject)));
+            }
+
+            return BuildNamedMessage(template, templateSource, values.ToArray());
+        }
+
+
+        public static string BuildString(StructuredMessage message)
+        {
+            StringBuilder builder = new StringBuilder();
+            var tokens = message.ParsedTemplate.GetTokens();
+            for (var i = 0; i < tokens.Length; i++)
+            {
+                if (tokens[i].GetType() == typeof(LiteralToken))
+                {
+                    builder.Append(tokens[i].BuildString());
+                }
+                else if (tokens[i] is PropertyHoleToken token)
+                {
+                    if (message.TemplateValues.ContainsKey(i))
+                    {
+                        if (string.IsNullOrWhiteSpace(token.Argument))
+                        {
+                            builder.Append(message.TemplateValues[i].Value);
+                        }
+                        else
+                        {
+                            builder.AppendFormat("{0:" + token.Argument + "}", message.TemplateValues[i].Value);
+                        }
+                    }
+                    else
+                    {
+                        builder.Append(token.BuildString());
+                    }
+                }
+            }
+            return builder.ToString();
+        }
     }
 }

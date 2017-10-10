@@ -546,7 +546,7 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = TemplateProcessor.ProcessNamedTemplate(template, holeValues);
+            var message = TemplateProcessor.BuildNamedMessage(template, holeValues);
 
             lock (_sinks)
             {
@@ -556,7 +556,7 @@ namespace WaterLogged
                                                        sinkKeyValue.Value.TagFilter.Contains(tag) ||
                                                        sinkKeyValue.Value.TagFilter.Length == 0))
                     {
-                        sinkKeyValue.Value.ProcessMessage( message, tag);
+                        sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
                 }
             }
@@ -578,7 +578,7 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = TemplateProcessor.ProcessTemplate(template, holeValues);
+            var message = TemplateProcessor.BuildMessage(template, holeValues);
 
             lock (_sinks)
             {
@@ -610,7 +610,7 @@ namespace WaterLogged
             {
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
-            var message = TemplateProcessor.ProcessParentedTemplate(template, parentObject);
+            var message = TemplateProcessor.BuildParentMessage(template, parentObject);
 
             lock (_sinks)
             {
@@ -643,7 +643,7 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             
-            var message = TemplateProcessor.ProcessParentedTemplate(template, parentType);
+            var message = TemplateProcessor.BuildParentMessage(template, parentType);
 
             lock (_sinks)
             {

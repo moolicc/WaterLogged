@@ -25,11 +25,13 @@ namespace WaterLogged.Serialization.Json
                 }
                 holeValues.Add((value.Key, value.Value.Value<object>()));
             }
-            return TemplateProcessor.ProcessNamedTemplate(template, holeValues.ToArray());
+            return TemplateProcessor.BuildNamedMessage(template, holeValues.ToArray());
         }
 
         public static string Write(StructuredMessage message)
         {
+            return "";
+            /*
             var jObject = new JObject();
             jObject.Add("time", message.CreationDate);
             jObject.Add("template", message.Template);
@@ -57,6 +59,7 @@ namespace WaterLogged.Serialization.Json
             }
 
             return jObject.ToString();
+            */
         }
     }
 }
