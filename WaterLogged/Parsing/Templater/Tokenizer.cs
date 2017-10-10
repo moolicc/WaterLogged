@@ -5,8 +5,15 @@ using WaterLogged.Parsing.Templater.Tokens;
 
 namespace WaterLogged.Parsing.Templater
 {
+    /// <summary>
+    /// Transforms a template source into a series of tokens.
+    /// </summary>
     public class Tokenizer
     {
+        /// <summary>
+        /// Parses a template source into a series of tokens.
+        /// </summary>
+        /// <param name="template">The source of the template to parse.</param>
         public static List<Token> Parse(string template)
         {
             var tokenizer = new Tokenizer(template);

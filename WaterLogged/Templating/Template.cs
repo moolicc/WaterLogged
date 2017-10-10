@@ -7,6 +7,9 @@ using WaterLogged.Parsing.Templater.Tokens;
 
 namespace WaterLogged.Templating
 {
+    /// <summary>
+    /// Represents a parsed Template.
+    /// </summary>
     public struct Template
     {
         private static Dictionary<string, Template> _templateCache;
@@ -16,16 +19,29 @@ namespace WaterLogged.Templating
             _templateCache = new Dictionary<string, Template>();
         }
 
+        /// <summary>
+        /// Clears the cache of parsed templates.
+        /// </summary>
         public static void ClearTemplateCache()
         {
             _templateCache.Clear();
         }
 
+        /// <summary>
+        /// Returns the number of items in the template cache.
+        /// </summary>
+        /// <returns></returns>
         public static int GetTemplateCacheSize()
         {
             return _templateCache.Count;
         }
 
+        /// <summary>
+        /// Returns a parsed representation of the specified template source.
+        /// If the source is cached, the result is pulled from the cache.
+        /// Otherwise, parses the source and caches the result.
+        /// </summary>
+        /// <param name="templateSource">The source of the template.</param>
         public static Template FromTemplateCache(string templateSource)
         {
             if (_templateCache.ContainsKey(templateSource))
@@ -40,10 +56,17 @@ namespace WaterLogged.Templating
             }
         }
 
+        /// <summary>
+        /// Gets a value indiciated if properties are named or indexed.
+        /// </summary>
         public bool NamedProperties { get; private set; }
 
         private Token[] _templateTokens;
 
+        /// <summary>
+        /// Instantiates a new Template instance using the specified tokens.
+        /// </summary>
+        /// <param name="tokens"></param>
         public Template(IEnumerable<Token> tokens)
         {
             NamedProperties = false;
@@ -60,11 +83,18 @@ namespace WaterLogged.Templating
             }
         }
 
+        /// <summary>
+        /// Returns the tokens this Template represents.
+        /// </summary>
+        /// <returns></returns>
         public Token[] GetTokens()
         {
             return _templateTokens;
         }
 
+        /// <summary>
+        /// Rebuilds the source of this template and returns the results.
+        /// </summary>
         public string BuildSource()
         {
             StringBuilder builder = new StringBuilder();

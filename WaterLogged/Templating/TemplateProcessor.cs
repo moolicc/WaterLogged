@@ -8,18 +8,37 @@ using WaterLogged.Parsing.Templater.Tokens;
 
 namespace WaterLogged.Templating
 {
+    /// <summary>
+    /// Contains functions for processing templated messages.
+    /// </summary>
     public static class TemplateProcessor
     {
+        /// <summary>
+        /// Parses a template and its property values and returns the resulting message.
+        /// </summary>
+        /// <param name="templateSource">The source of the template.</param>
+        /// <param name="values">An array of values to resolve for the template's propeties.</param>
         public static StructuredMessage BuildMessage(string templateSource, params object[] values)
         {
             return BuildMessage(Template.FromTemplateCache(templateSource), templateSource, values);
         }
 
+        /// <summary>
+        /// Parses a template and its property values and returns the resulting message.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="values">An array of values to resolve for the template's propeties.</param>
         public static StructuredMessage BuildMessage(Template template, params object[] values)
         {
             return BuildMessage(template, template.BuildSource(), values);
         }
 
+        /// <summary>
+        /// Parses a template and its property values and returns the resulting message.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="templateSource">The source of the template.</param>
+        /// <param name="values">An array of values to resolve for the template's propeties.</param>
         public static StructuredMessage BuildMessage(Template template, string templateSource, params object[] values)
         {
             Dictionary<string, int> indices = new Dictionary<string, int>();
@@ -58,18 +77,35 @@ namespace WaterLogged.Templating
         }
 
 
+
+        /// <summary>
+        /// Parses a template and its property values by the property names and returns the resulting message.
+        /// </summary>
+        /// <param name="templateSource">The source of the template.</param>
+        /// <param name="values">An array of values to resolve for the template's propeties.</param>
         public static StructuredMessage BuildNamedMessage(string templateSource,
             params (string name, object val)[] values)
         {
             return BuildNamedMessage(Template.FromTemplateCache(templateSource), templateSource, values);
         }
 
+        /// <summary>
+        /// Parses a template and its property values by the property names and returns the resulting message.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="values">An array of values to resolve for the template's propeties.</param>
         public static StructuredMessage BuildNamedMessage(Template template,
             params (string name, object val)[] values)
         {
             return BuildNamedMessage(template, template.BuildSource(), values);
         }
 
+        /// <summary>
+        /// Parses a template and its property values by the property names and returns the resulting message.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="templateSource">The source of the template.</param>
+        /// <param name="values">An array of values to resolve for the template's propeties.</param>
         public static StructuredMessage BuildNamedMessage(Template template, string templateSource, params (string name, object val)[] values)
         {
             StructuredMessage message = new StructuredMessage(templateSource, template);
@@ -93,18 +129,35 @@ namespace WaterLogged.Templating
 
             return message;
         }
-        
 
+
+
+        /// <summary>
+        /// Parses a template and its property values by the members contained in a parent object and returns the resulting message.
+        /// </summary>
+        /// <param name="templateSource">The source of the template.</param>
+        /// <param name="parentObject">An object containing members to resolve from.</param>
         public static StructuredMessage BuildParentMessage(string templateSource, object parentObject)
         {
             return BuildParentMessage(Template.FromTemplateCache(templateSource), templateSource, parentObject);
         }
 
+        /// <summary>
+        /// Parses a template and its property values by the members contained in a parent object and returns the resulting message.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="parentObject">An object containing members to resolve from.</param>
         public static StructuredMessage BuildParentMessage(Template template, object parentObject)
         {
             return BuildParentMessage(template, template.BuildSource(), parentObject);
         }
 
+        /// <summary>
+        /// Parses a template and its property values by the members contained in a parent object and returns the resulting message.
+        /// </summary>
+        /// <param name="template">The template.</param>
+        /// <param name="templateSource">The source of the template.</param>
+        /// <param name="parentObject">An object containing members to resolve from.</param>
         public static StructuredMessage BuildParentMessage(Template template, string templateSource,
             object parentObject)
         {
@@ -174,6 +227,11 @@ namespace WaterLogged.Templating
         }
 
 
+        /// <summary>
+        /// Renders a structured log message to a string and returns the result.
+        /// </summary>
+        /// <param name="message">The message to render.</param>
+        /// <returns></returns>
         public static string BuildString(StructuredMessage message)
         {
             StringBuilder builder = new StringBuilder();
