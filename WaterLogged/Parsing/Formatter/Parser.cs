@@ -37,7 +37,7 @@ namespace WaterLogged.Parsing.Formatter
         }
 
         /// <summary>
-        /// Parsed the tokens into an array of <see cref="WaterLogged.Parsing.Expressions.IExpression"/>.
+        /// Parses the tokens into an array of <see cref="WaterLogged.Parsing.Formatter.Expressions.IExpression"/>.
         /// </summary>
         public IExpression[] Parse()
         {
