@@ -1,29 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
-    <Authors>Icecream-Burglar</Authors>
-    <PackageId>WaterLogged</PackageId>
-    <Description>This package contains the logging infrastructure for WaterLogged.</Description>
-    <PackageLicenseUrl>https://github.com/Icecream-Burglar/WaterLogged/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/Icecream-Burglar/WaterLogged</PackageProjectUrl>
-    <Copyright>Copyright (c) 2017 Icecream-Burglar</Copyright>
-    <RepositoryUrl>https://github.com/Icecream-Burglar/WaterLogged</RepositoryUrl>
-    <PackageTags>log logger logs logging</PackageTags>
-    <RepositoryType>Dependency</RepositoryType>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>1.1.0</Version>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netcoreapp2.0\WaterLogged.xml</DocumentationFile>
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CoreCLR-NCalc" Version="2.1.3" />
-    <PackageReference Include="System.ValueTuple" Version="4.3.0" />
   </ItemGroup>
 
 </Project>
