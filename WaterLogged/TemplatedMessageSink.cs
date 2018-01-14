@@ -15,9 +15,9 @@ namespace WaterLogged
         /// </summary>
         public bool Enabled { get; set; }
         /// <summary>
-        /// Gets or sets an array of tags to whitelist.
+        /// Gets or sets a filter that filters messages that will be output through this listener.
         /// </summary>
-        public string[] TagFilter { get; set; }
+        public FilterManager Filter { get; set; }
         /// <summary>
         /// Gets the name of this TemplatedMessageSink.
         /// </summary>
@@ -30,7 +30,7 @@ namespace WaterLogged
         protected TemplatedMessageSink()
         {
             Enabled = true;
-            TagFilter = new string[0];
+            Filter = new FilterManager();
         }
 
         /// <summary>

@@ -31,6 +31,11 @@ namespace WaterLogged
         /// </summary>
         public TemplatedMessageSink[] Sinks { get { return _sinks.Values.ToArray(); } }
 
+        /// <summary>
+        /// Gets or sets a filter to use for all logging messages.
+        /// </summary>
+        public FilterManager Filter { get; set; }
+
         private Dictionary<string, Listener> _listeners;
         private Dictionary<string, TemplatedMessageSink> _sinks;
 
@@ -52,6 +57,7 @@ namespace WaterLogged
             _sinks = new Dictionary<string, TemplatedMessageSink>();
             Name = name;
             Enabled = true;
+            Filter = new FilterManager();
             Global.LogCreated(this);
         }
 
@@ -427,11 +433,16 @@ namespace WaterLogged
                 formattedValue = Formatter.Transform(this, value, tag, new Dictionary<string, string>());
             }
 
+            if (!Filter.Validate(value, tag))
+            {
+                return;
+            }
+
             lock (_listeners)
             {
                 foreach (var listenerKeyValue in _listeners)
                 {
-                    if (listenerKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) || listenerKeyValue.Value.TagFilter.Contains(tag) || listenerKeyValue.Value.TagFilter.Length == 0))
+                    if (listenerKeyValue.Value.Enabled && listenerKeyValue.Value.Filter.Validate(value, tag))
                     {
                         if (listenerKeyValue.Value.FormatterArgs.Count > 0)
                         {
@@ -548,13 +559,16 @@ namespace WaterLogged
             }
             var message = TemplateProcessor.BuildNamedMessage(template, holeValues);
 
+            if (!Filter.ValidateTemplated(message, tag))
+            {
+                return;
+            }
+
             lock (_sinks)
             {
                 foreach (var sinkKeyValue in _sinks)
                 {
-                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
                     {
                         sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
@@ -580,13 +594,16 @@ namespace WaterLogged
             }
             var message = TemplateProcessor.BuildMessage(template, holeValues);
 
+            if (!Filter.ValidateTemplated(message, tag))
+            {
+                return;
+            }
+
             lock (_sinks)
             {
                 foreach (var sinkKeyValue in _sinks)
                 {
-                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
                     {
                         sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
@@ -612,13 +629,16 @@ namespace WaterLogged
             }
             var message = TemplateProcessor.BuildParentMessage(template, parentObject);
 
+            if (!Filter.ValidateTemplated(message, tag))
+            {
+                return;
+            }
+
             lock (_sinks)
             {
                 foreach (var sinkKeyValue in _sinks)
                 {
-                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
                     {
                         sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
@@ -645,13 +665,16 @@ namespace WaterLogged
             
             var message = TemplateProcessor.BuildParentMessage(template, parentType);
 
+            if (!Filter.ValidateTemplated(message, tag))
+            {
+                return;
+            }
+
             lock (_sinks)
             {
                 foreach (var sinkKeyValue in _sinks)
                 {
-                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
                     {
                         sinkKeyValue.Value.ProcessMessage(message, tag);
                     }
@@ -670,13 +693,15 @@ namespace WaterLogged
             {
                 return;
             }
+            if (!Filter.ValidateTemplated(message, tag))
+            {
+                return;
+            }
             lock (_sinks)
             {
                 foreach (var sinkKeyValue in _sinks)
                 {
-                    if (sinkKeyValue.Value.Enabled && (string.IsNullOrWhiteSpace(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Contains(tag) ||
-                                                       sinkKeyValue.Value.TagFilter.Length == 0))
+                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
                     {
                         sinkKeyValue.Value.ProcessMessage(message, tag);
                     }

@@ -13,9 +13,9 @@ namespace WaterLogged
         /// </summary>
         public bool Enabled { get; set; }
         /// <summary>
-        /// Gets or sets an array of tags to whitelist.
+        /// Gets or sets a filter that filters messages that will be output through this listener.
         /// </summary>
-        public string[] TagFilter { get; set; }
+        public FilterManager Filter { get; set; }
         /// <summary>
         /// Gets the <see cref="Log"/> that owns this Listener.
         /// </summary>
@@ -32,7 +32,7 @@ namespace WaterLogged
         protected Listener()
         {
             Enabled = true;
-            TagFilter = new string[0];
+            Filter = new FilterManager();
             FormatterArgs = new Dictionary<string, string>();
         }
 
@@ -45,7 +45,6 @@ namespace WaterLogged
             if (Log != null)
             {
                 Log.ChangeListenerName(Name, newName);
-                Name = newName;
             }
             Name = newName;
         }
