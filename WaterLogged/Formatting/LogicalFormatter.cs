@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using WaterLogged.Parsing.Formatter;
 using WaterLogged.Parsing.Formatter.Expressions;
 
@@ -164,6 +165,8 @@ namespace WaterLogged.Formatting
             BaseContext.Functions.Add("trim", new Func<string, string>(s1 => s1.Trim()));
             BaseContext.Functions.Add("trimend", new Func<string, string>(s1 => s1.TrimEnd()));
             BaseContext.Functions.Add("trimstart", new Func<string, string>(s1 => s1.TrimStart()));
+            BaseContext.Functions.Add("threadid", new Func<string>(Thread.CurrentThread.ManagedThreadId.ToString));
+            BaseContext.Functions.Add("threadname", new Func<string>(() => Thread.CurrentThread.Name));
         }
 
         /// <summary>
