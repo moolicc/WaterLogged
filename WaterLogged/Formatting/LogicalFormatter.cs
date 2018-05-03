@@ -49,6 +49,11 @@ namespace WaterLogged.Formatting
         public Context BaseContext { get; set; }
 
         /// <summary>
+        /// Gets or sets a callback to use when creating the MessageContext for use with the evaluation of a message.
+        /// </summary>
+        public OnCreateMessageFunction CreateMessageFunctionCallback { get; set; }
+
+        /// <summary>
         /// A set of variables that can be accessed from the format string by using the
         /// "getvar" and "setvar" functions.
         /// </summary>
@@ -197,6 +202,8 @@ namespace WaterLogged.Formatting
         private string DoFormat(IExpression[] sourceTree, Log log, string input, string tag, Dictionary<string, string> overrides)
         {
             var context = new MessageContext(BaseContext, log, tag, input);
+            CreateMessageFunctionCallback?.Invoke(context);
+
             var evaluator = new Evaluator(sourceTree);
             evaluator.Context = context;
 
