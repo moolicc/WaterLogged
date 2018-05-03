@@ -36,6 +36,11 @@ namespace WaterLogged
         /// </summary>
         public FilterManager Filter { get; set; }
 
+        /// <summary>
+        /// Gets or sets a tag to use when logging messages and no tag is specified.
+        /// </summary>
+        public string DefaultTag { get; set; }
+
         private Dictionary<string, Listener> _listeners;
         private Dictionary<string, TemplatedMessageSink> _sinks;
 
@@ -59,6 +64,7 @@ namespace WaterLogged
             Enabled = true;
             Filter = new FilterManager();
             Global.LogCreated(this);
+            DefaultTag = "";
         }
 
         /// <summary>
@@ -425,6 +431,10 @@ namespace WaterLogged
             if (!Enabled)
             {
                 return;
+            }
+            if (string.IsNullOrWhiteSpace(tag))
+            {
+                tag = DefaultTag;
             }
 
             string formattedValue = value;
