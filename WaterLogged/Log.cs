@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using WaterLogged.Templating;
 
 namespace WaterLogged
@@ -717,6 +718,53 @@ namespace WaterLogged
                     }
                 }
             }
+        }
+
+
+        //********************************************
+        // WriteException
+        //********************************************
+
+        public void WriteException(Exception exception)
+        {
+            WriteException(exception, false, "", false);
+        }
+
+        public void WriteException(Exception exception, bool throwException)
+        {
+            WriteException(exception, false, "", false);
+        }
+
+        public void WriteException(Exception exception, bool throwException, string tag)
+        {
+            WriteException(exception, throwException, tag, false);
+        }
+
+        public void WriteException(Exception exception, bool throwException, string tag, bool printStack)
+        {
+            var builder = new StringBuilder();
+            GetExceptionPrintout(builder, exception);
+
+            if (printStack)
+            {
+                builder.AppendLine(exception.StackTrace);
+            }
+
+            WriteTag(builder.ToString(), tag);
+            if (throwException)
+            {
+                throw exception;
+            }
+        }
+
+        private void GetExceptionPrintout(StringBuilder builder, Exception exception, string indention = "")
+        {
+            if (exception == null)
+            {
+                return;
+            }
+            builder.AppendFormat("{0}{1}: {2}{3}", indention, exception.GetType(), exception.Message, Environment.NewLine);
+            GetExceptionPrintout(builder, exception.InnerException, indention + "  ");
         }
     }
 }
