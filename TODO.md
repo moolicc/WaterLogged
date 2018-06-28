@@ -3,8 +3,9 @@
 - [ ] Cleanup
     - [ ] Log
     - [ ] Listener
-    - [ ] Filtering.cs
-    - [ ] Formatting.cs
-    - [ ] Templated Messages.cs
+    - [ ] Filtering
+    - [ ] Formatting
+    - [ ] Templated Messages
+- [ ] Optimize
 - [ ] Rewrite ReadMe
 - [ ] Maybe write a github wiki.
