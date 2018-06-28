@@ -113,10 +113,10 @@ namespace WaterLogged
                     LogFilter.Filters.Add(filter);
                     break;
                 case Contexts.Listener:
-                    LastListener.Filter.Filters.Add(filter);
+                    LastListener.FilterManager.Filters.Add(filter);
                     break;
                 case Contexts.Sink:
-                    LastSink.Filter.Filters.Add(filter);
+                    LastSink.FilterManager.Filters.Add(filter);
                     break;
             }
             return this;
@@ -130,10 +130,10 @@ namespace WaterLogged
                     LogFilter.Filters.Add(new DelegatedFilter(filter));
                     break;
                 case Contexts.Listener:
-                    LastListener.Filter.Filters.Add(new DelegatedFilter(filter));
+                    LastListener.FilterManager.Filters.Add(new DelegatedFilter(filter));
                     break;
                 case Contexts.Sink:
-                    LastSink.Filter.Filters.Add(new DelegatedFilter(filter));
+                    LastSink.FilterManager.Filters.Add(new DelegatedFilter(filter));
                     break;
             }
             return this;
@@ -147,10 +147,10 @@ namespace WaterLogged
                     LogFilter.TemplatedFilters.Add(filter);
                     break;
                 case Contexts.Listener:
-                    LastListener.Filter.TemplatedFilters.Add(filter);
+                    LastListener.FilterManager.TemplatedFilters.Add(filter);
                     break;
                 case Contexts.Sink:
-                    LastSink.Filter.TemplatedFilters.Add(filter);
+                    LastSink.FilterManager.TemplatedFilters.Add(filter);
                     break;
             }
             return this;
@@ -164,10 +164,10 @@ namespace WaterLogged
                     LogFilter.TemplatedFilters.Add(new DelegatedFilter(filter));
                     break;
                 case Contexts.Listener:
-                    LastListener.Filter.TemplatedFilters.Add(new DelegatedFilter(filter));
+                    LastListener.FilterManager.TemplatedFilters.Add(new DelegatedFilter(filter));
                     break;
                 case Contexts.Sink:
-                    LastSink.Filter.TemplatedFilters.Add(new DelegatedFilter(filter));
+                    LastSink.FilterManager.TemplatedFilters.Add(new DelegatedFilter(filter));
                     break;
             }
             return this;
@@ -201,7 +201,7 @@ namespace WaterLogged
             {
                 log = new Log(_logName);
             }
-            log.Filter = LogFilter;
+            log.FilterManager = LogFilter;
             log.Formatter = Formatter;
 
             foreach (var listener in _listeners)

@@ -14,23 +14,32 @@ namespace WaterLogged
         /// Gets or sets a value indicating if this <see cref="TemplatedMessageSink"/> implementation is enabled.
         /// </summary>
         public bool Enabled { get; set; }
+
         /// <summary>
         /// Gets or sets a filter that filters messages that will be output through this listener.
         /// </summary>
-        public FilterManager Filter { get; set; }
+        public FilterManager FilterManager
+        {
+            get => _filterManager;
+            set => _filterManager = value ?? throw new ArgumentNullException(nameof(FilterManager), "You cannot have a null filter.");
+        }
+
         /// <summary>
         /// Gets the name of this TemplatedMessageSink.
         /// </summary>
         public string Name { get; internal set; }
+
         /// <summary>
         /// Gets the <see cref="Log"/> that owns this TemplatedMessageSink.
         /// </summary>
         public Log Log { get; internal set; }
+        
+        private FilterManager _filterManager;
 
         protected TemplatedMessageSink()
         {
             Enabled = true;
-            Filter = new FilterManager();
+            FilterManager = new FilterManager();
         }
 
         /// <summary>

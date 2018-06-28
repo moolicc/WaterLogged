@@ -15,14 +15,17 @@ namespace WaterLogged.Listeners
         /// The text encoding to use when sending messages.
         /// </summary>
         public Encoding Encoding { get; set; }
+
         /// <summary>
         /// A string to append onto messages when sending to signify the end of a transmission.
         /// </summary>
         public string MessageEnding { get; set; }
+
         /// <summary>
         /// The host's IP Address.
         /// </summary>
         public string HostAddress { get; private set; }
+
         /// <summary>
         /// The port on which to establish a connection.
         /// </summary>

@@ -64,6 +64,7 @@ namespace WaterLogged
         /// When overridden in a derived class; returns the <see cref="Type"/> the transformer works on.
         /// </summary>
         public abstract Type TargetType { get; }
+
         /// <summary>
         /// When overridden in a derived class; converts the specified value into a friendly string representation.
         /// </summary>

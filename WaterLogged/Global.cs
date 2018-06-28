@@ -14,16 +14,18 @@ namespace WaterLogged
         /// <see cref="WaterLogged.Listeners.StandardOut"/> listener upon Log creation if the DEBUG flag is defined.
         /// </summary>
         public static bool AddConsoleListenerOnDebug { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating if the next <see cref="Log"/> to be created will automatically become the PrimaryLog.
         /// </summary>
         public static bool NextLogIsPrimary { get; set; }
+
         /// <summary>
         /// Gets or sets the PrimaryLog.
         /// </summary>
         public static Log PrimaryLog
         {
-            get { return _primaryLog; }
+            get => _primaryLog;
             set
             {
                 if (NextLogIsPrimary)
@@ -33,6 +35,7 @@ namespace WaterLogged
                 _primaryLog = value;
             }
         }
+
         /// <summary>
         /// A collection of Logs accessible by any type of key.
         /// </summary>

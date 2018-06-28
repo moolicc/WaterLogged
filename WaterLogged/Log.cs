@@ -29,7 +29,11 @@ namespace WaterLogged
         /// <summary>
         /// Gets or sets a filter to use for all logging messages.
         /// </summary>
-        public FilterManager Filter { get; set; }
+        public FilterManager FilterManager
+        {
+            get => _filterManager;
+            set => _filterManager = value ?? throw new ArgumentNullException(nameof(FilterManager), "You cannot have a null filter.");
+        }
 
         /// <summary>
         /// Gets or sets a tag to use when logging messages and no tag is specified.
@@ -45,7 +49,8 @@ namespace WaterLogged
         /// Gets an array of <see cref="TemplatedMessageSink"/>.
         /// </summary>
         public TemplatedMessageSink[] Sinks => _sinks.Values.ToArray();
-
+        
+        private FilterManager _filterManager;
         private Dictionary<string, Listener> _listeners;
         private Dictionary<string, TemplatedMessageSink> _sinks;
 
@@ -67,7 +72,7 @@ namespace WaterLogged
             _sinks = new Dictionary<string, TemplatedMessageSink>();
 
             Name = name;
-            Filter = new FilterManager();
+            FilterManager = new FilterManager();
             Enabled = true;
             DefaultTag = "";
 
@@ -452,7 +457,7 @@ namespace WaterLogged
                 formattedMessage = Formatter.Transform(this, value, tag, new Dictionary<string, string>());
             }
 
-            if (!Filter.Validate(value, tag))
+            if (!FilterManager.Validate(value, tag))
             {
                 return;
             }
@@ -656,7 +661,7 @@ namespace WaterLogged
             {
                 return;
             }
-            if (!Filter.ValidateTemplated(message, tag))
+            if (!FilterManager.ValidateTemplated(message, tag))
             {
                 return;
             }
@@ -664,7 +669,7 @@ namespace WaterLogged
             {
                 foreach (var sink in _sinks.Values)
                 {
-                    if (sink.Enabled && sink.Filter.ValidateTemplated(message, tag))
+                    if (sink.Enabled && sink.FilterManager.ValidateTemplated(message, tag))
                     {
                         sink.ProcessMessage(message, tag);
                     }
@@ -741,7 +746,7 @@ namespace WaterLogged
             {
                 foreach (var listener in _listeners.Values)
                 {
-                    if (listener.Enabled && listener.Filter.Validate(message, tag))
+                    if (listener.Enabled && listener.FilterManager.Validate(message, tag))
                     {
                         if(Formatter != null && listener.FormatterArgs.Count > 0)
                         {

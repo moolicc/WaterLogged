@@ -1,7 +1,7 @@
 # TODO:
 - [x] Multi-threaded writing
 - [ ] Cleanup
-    - [ ] Log
+    - [x] Log
     - [ ] Listener
     - [ ] Filtering
     - [ ] Formatting
