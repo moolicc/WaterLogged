@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WaterLogged.Listeners
+namespace WaterLogged.Output
 {
     /// <summary>
     /// Implements a listener which outputs to the Standard Output Stream.

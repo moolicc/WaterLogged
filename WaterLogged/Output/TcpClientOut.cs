@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 using Socket = System.Net.Sockets.TcpClient;
 
-namespace WaterLogged.Listeners
+namespace WaterLogged.Output
 {
     /// <summary>
     /// Implements a listener which spits out messages to a remote TCP Listener.

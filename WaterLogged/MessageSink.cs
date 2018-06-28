@@ -6,17 +6,17 @@ using WaterLogged.Templating;
 namespace WaterLogged
 {
     /// <summary>
-    /// Base class for TemplatedMessageSink implementations.
+    /// Base class for MessageSink implementations.
     /// </summary>
-    public abstract class TemplatedMessageSink
+    public abstract class MessageSink : IMessageSink
     {
         /// <summary>
-        /// Gets or sets a value indicating if this <see cref="TemplatedMessageSink"/> implementation is enabled.
+        /// Gets or sets a value indicating if this <see cref="MessageSink"/> implementation is enabled.
         /// </summary>
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// Gets or sets a filter that filters messages that will be output through this listener.
+        /// Gets or sets a filter that filters messages that will be output through this sink.
         /// </summary>
         public FilterManager FilterManager
         {
@@ -25,13 +25,13 @@ namespace WaterLogged
         }
 
         /// <summary>
-        /// Gets the <see cref="Log"/> that owns this TemplatedMessageSink.
+        /// Gets the <see cref="Log"/> that owns this MessageSink.
         /// </summary>
-        public Log Log { get; internal set; }
+        public Log Log { get; set; }
         
         private FilterManager _filterManager;
 
-        protected TemplatedMessageSink()
+        protected MessageSink()
         {
             Enabled = true;
             FilterManager = new FilterManager();

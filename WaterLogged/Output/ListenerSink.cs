@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using WaterLogged.Templating;
 
-namespace WaterLogged
+namespace WaterLogged.Output
 {
     /// <summary>
-    /// Base class for Listener implementations.
+    /// Represents both a <see cref="IListener"/> and <see cref="IMessageSink"/>.
     /// </summary>
-    public abstract class Listener : IListener
+    public abstract class ListenerSink : IListener, IMessageSink
     {
         /// <summary>
-        /// Gets or sets a value indicating if this <see cref="Listener"/> implementation is enabled.
+        /// Gets or sets a value indicating if this Listener/Sink is enabled.
         /// </summary>
         public bool Enabled { get; set; }
 
         /// <summary>
-        /// Gets or sets a filter that filters messages that will be output through this <see cref="Listener"/>.
+        /// Gets or sets a filter that filters messages that will be output through this Listener/Sink.
         /// </summary>
         public FilterManager FilterManager
         {
@@ -24,7 +25,7 @@ namespace WaterLogged
         }
 
         /// <summary>
-        /// Gets the <see cref="Log"/> that owns this Listener.
+        /// Gets the <see cref="Log"/> that owns this Listener/Sink.
         /// </summary>
         public Log Log { get; set; }
 
@@ -35,18 +36,19 @@ namespace WaterLogged
         
         private FilterManager _filterManager;
 
-        protected Listener()
+        protected ListenerSink()
         {
             Enabled = true;
             FilterManager = new FilterManager();
             FormatterArgs = new Dictionary<string, string>();
         }
 
-        /// <summary>
-        /// When overridden in a derived class; Handles an output message.
-        /// </summary>
-        /// <param name="value">The message.</param>
-        /// <param name="tag">The message's tag.</param>
-        public abstract void Write(string value, string tag);
+        public virtual void ProcessMessage(StructuredMessage message, string tag)
+        {
+        }
+
+        public virtual void Write(string value, string tag)
+        {
+        }
     }
 }

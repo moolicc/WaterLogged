@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Mail;
 
-namespace WaterLogged.Listeners
+namespace WaterLogged.Output
 {
     //TODO: 
     //Add throttling to the write. To allow this to support a large number of instances/apps, sending them in batches every 30 seconds, or whatever user sets

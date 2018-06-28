@@ -68,7 +68,7 @@ namespace WaterLogged.Serialization
             return definition;
         }
 
-        private static SinkDefinition GetSinkDefinition(TemplatedMessageSink sink)
+        private static SinkDefinition GetSinkDefinition(MessageSink sink)
         {
             var definition = new SinkDefinition();
             definition.Id = string.Format("sink{0}", DateTime.Now.Ticks);
@@ -131,7 +131,7 @@ namespace WaterLogged.Serialization
             return (Listener)creator.Create();
         }
 
-        public TemplatedMessageSink ResolveSink(string name)
+        public MessageSink ResolveSink(string name)
         {
             SinkDefinition sink = Sinks[name];
             TypeCreator creator = new TypeCreator(sink.Type);
@@ -141,7 +141,7 @@ namespace WaterLogged.Serialization
                 creator.MemberValues.Add(formatterProperty.Key, formatterProperty.Value);
             }
 
-            return (TemplatedMessageSink)creator.Create();
+            return (MessageSink)creator.Create();
         }
 
         public Log ResolveLog(string name)

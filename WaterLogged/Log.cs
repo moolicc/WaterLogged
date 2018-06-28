@@ -41,18 +41,18 @@ namespace WaterLogged
         public string DefaultTag { get; set; }
 
         /// <summary>
-        /// Gets an array of <see cref="Listeners"/>.
+        /// Gets an array of <see cref="IListener"/>.
         /// </summary>
-        public Listener[] Listeners => _listeners.ToArray();
+        public IListener[] Listeners => _listeners.ToArray();
 
         /// <summary>
-        /// Gets an array of <see cref="TemplatedMessageSink"/>.
+        /// Gets an array of <see cref="IMessageSink"/>.
         /// </summary>
-        public TemplatedMessageSink[] Sinks => _sinks.ToArray();
+        public IMessageSink[] Sinks => _sinks.ToArray();
         
         private FilterManager _filterManager;
-        private List<Listener> _listeners;
-        private List<TemplatedMessageSink> _sinks;
+        private List<IListener> _listeners;
+        private List<IMessageSink> _sinks;
 
         /// <summary>
         /// Instantiates an instance of <see cref="Log"/> with a default name.
@@ -68,8 +68,8 @@ namespace WaterLogged
         /// <param name="name">The name of the Log.</param>
         public Log(string name)
         {
-            _listeners = new List<Listener>();
-            _sinks = new List<TemplatedMessageSink>();
+            _listeners = new List<IListener>();
+            _sinks = new List<IMessageSink>();
 
             Name = name;
             FilterManager = new FilterManager();
@@ -80,10 +80,10 @@ namespace WaterLogged
         }
 
         /// <summary>
-        /// Adds a <see cref="Listener"/> to this Log.
+        /// Adds an <see cref="IListener"/> to this Log.
         /// </summary>
         /// <param name="listener">The Listener to add.</param>
-        public Log AddListener(Listener listener)
+        public Log AddListener(IListener listener)
         {
             if (listener.Log != null)
             {
@@ -95,20 +95,20 @@ namespace WaterLogged
         }
 
         /// <summary>
-        /// Returns a value indicating if this Log contains the specified <see cref="Listener"/>.
+        /// Returns a value indicating if this Log contains the specified <see cref="LIistener"/>.
         /// </summary>
         /// <param name="listener">The Listener to search for.</param>
         /// <returns></returns>
-        public bool ContainsListener(Listener listener)
+        public bool ContainsListener(IListener listener)
         {
             return _listeners.Contains(listener);
         }
 
         /// <summary>
-        /// Removes the specified <see cref="Listener"/>.
+        /// Removes the specified <see cref="IListener"/>.
         /// </summary>
         /// <param name="listener">The listener to remove.</param>
-        public Log RemoveListener(Listener listener)
+        public Log RemoveListener(IListener listener)
         {
             listener.Log = null;
             _listeners.Remove(listener);
@@ -117,10 +117,10 @@ namespace WaterLogged
         
 
         /// <summary>
-        /// Adds a <see cref="TemplatedMessageSink"/> to this Log.
+        /// Adds a <see cref="IMessageSink"/> to this Log.
         /// </summary>
         /// <param name="sink">The sink to add.</param>
-        public Log AddSink(TemplatedMessageSink sink)
+        public Log AddSink(IMessageSink sink)
         {
             if (sink.Log != null)
             {
@@ -131,20 +131,20 @@ namespace WaterLogged
         }
 
         /// <summary>
-        /// Returns a value indicating if this Log contains the specified <see cref="TemplatedMessageSink"/>.
+        /// Returns a value indicating if this Log contains the specified <see cref="IMessageSink"/>.
         /// </summary>
         /// <param name="sink">The TemplatedMessageSink to search for.</param>
         /// <returns></returns>
-        public bool ContainsSink(TemplatedMessageSink sink)
+        public bool ContainsSink(IMessageSink sink)
         {
             return _sinks.Contains(sink);
         }
 
         /// <summary>
-        /// Removes the specified <see cref="TemplatedMessageSink"/>.
+        /// Removes the specified <see cref="IMessageSink"/>.
         /// </summary>
         /// <param name="sink">The TemplatedMessageSink to remove.</param>
-        public Log RemoveSink(TemplatedMessageSink sink)
+        public Log RemoveSink(IMessageSink sink)
         {
             sink.Log = null;
             _sinks.Remove(sink);

@@ -19,11 +19,11 @@ namespace WaterLogged
         public FilterManager LogFilter { get; set; }
         public LogicalFormatter Formatter { get; private set; }
         public Listener LastListener { get; private set; }
-        public TemplatedMessageSink LastSink { get; private set; }
+        public MessageSink LastSink { get; private set; }
 
         private string _logName;
         private List<Listener> _listeners;
-        private List<TemplatedMessageSink> _messageSinks;
+        private List<MessageSink> _messageSinks;
 
         private object _globalKey;
         private bool _globalPrimary;
@@ -33,7 +33,7 @@ namespace WaterLogged
         {
             _logName = "";
             _listeners = new List<Listener>();
-            _messageSinks = new List<TemplatedMessageSink>();
+            _messageSinks = new List<MessageSink>();
             Context = Contexts.Log;
             Formatter = new LogicalFormatter();
             LogFilter = new FilterManager();
@@ -50,7 +50,7 @@ namespace WaterLogged
             return this;
         }
 
-        public LogBuilder WithSink(TemplatedMessageSink sink)
+        public LogBuilder WithSink(MessageSink sink)
         {
             _messageSinks.Add(sink);
             LastSink = sink;

@@ -1,5 +1,5 @@
 ﻿
-namespace WaterLogged.Listeners
+namespace WaterLogged.Output
 {
     /// <summary>
     /// Implements a listener which appends output to a file.

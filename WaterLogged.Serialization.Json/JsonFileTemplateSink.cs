@@ -4,7 +4,7 @@ using WaterLogged.Templating;
 
 namespace WaterLogged.Serialization.Json
 {
-    public class JsonFileTemplateSink : TemplatedMessageSink
+    public class JsonFileTemplateSink : MessageSink
     {
         public string Filepath { get; private set; }
 
