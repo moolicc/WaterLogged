@@ -61,11 +61,13 @@ namespace WaterLogged
         {
             _listeners = new Dictionary<string, Listener>();
             _sinks = new Dictionary<string, TemplatedMessageSink>();
+
             Name = name;
-            Enabled = true;
             Filter = new FilterManager();
-            Global.LogCreated(this);
+            Enabled = true;
             DefaultTag = "";
+
+            Global.LogCreated(this);
         }
 
         /// <summary>
@@ -438,10 +440,10 @@ namespace WaterLogged
                 tag = DefaultTag;
             }
 
-            string formattedValue = value;
+            string formattedMessage = value;
             if (Formatter != null)
             {
-                formattedValue = Formatter.Transform(this, value, tag, new Dictionary<string, string>());
+                formattedMessage = Formatter.Transform(this, value, tag, new Dictionary<string, string>());
             }
 
             if (!Filter.Validate(value, tag))
@@ -449,24 +451,12 @@ namespace WaterLogged
                 return;
             }
 
-            lock (_listeners)
+            if(LogPool.StageMessage(this, formattedMessage, tag))
             {
-                foreach (var listenerKeyValue in _listeners)
-                {
-                    if (listenerKeyValue.Value.Enabled && listenerKeyValue.Value.Filter.Validate(value, tag))
-                    {
-                        if (listenerKeyValue.Value.FormatterArgs.Count > 0)
-                        {
-                            if (Formatter != null)
-                            {
-                                listenerKeyValue.Value.Write(Formatter.Transform(this, value, tag, listenerKeyValue.Value.FormatterArgs), tag);
-                                continue;
-                            }
-                        }
-                        listenerKeyValue.Value.Write(formattedValue, tag);
-                    }
-                }
+                return;
             }
+
+            PushMessage(formattedMessage, tag);
         }
 
 
@@ -569,22 +559,11 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             var message = TemplateProcessor.BuildNamedMessage(template, holeValues);
-
-            if (!Filter.ValidateTemplated(message, tag))
+            if(LogPool.StageMessage(this, message, tag))
             {
                 return;
             }
-
-            lock (_sinks)
-            {
-                foreach (var sinkKeyValue in _sinks)
-                {
-                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
-                    {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
-                    }
-                }
-            }
+            WriteStructuredMessage(message, tag);
         }
 
         /// <summary>
@@ -604,22 +583,11 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             var message = TemplateProcessor.BuildMessage(template, holeValues);
-
-            if (!Filter.ValidateTemplated(message, tag))
+            if(LogPool.StageMessage(this, message, tag))
             {
                 return;
             }
-
-            lock (_sinks)
-            {
-                foreach (var sinkKeyValue in _sinks)
-                {
-                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
-                    {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
-                    }
-                }
-            }
+            WriteStructuredMessage(message, tag);
         }
 
         /// <summary>
@@ -639,22 +607,11 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             var message = TemplateProcessor.BuildParentMessage(template, parentObject);
-
-            if (!Filter.ValidateTemplated(message, tag))
+            if(LogPool.StageMessage(this, message, tag))
             {
                 return;
             }
-
-            lock (_sinks)
-            {
-                foreach (var sinkKeyValue in _sinks)
-                {
-                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
-                    {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
-                    }
-                }
-            }
+            WriteStructuredMessage(message, tag);
         }
 
         /// <summary>
@@ -675,22 +632,11 @@ namespace WaterLogged
             }
             
             var message = TemplateProcessor.BuildParentMessage(template, parentType);
-
-            if (!Filter.ValidateTemplated(message, tag))
+            if(LogPool.StageMessage(this, message, tag))
             {
                 return;
             }
-
-            lock (_sinks)
-            {
-                foreach (var sinkKeyValue in _sinks)
-                {
-                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
-                    {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
-                    }
-                }
-            }
+            WriteStructuredMessage(message, tag);
         }
 
         /// <summary>
@@ -725,21 +671,42 @@ namespace WaterLogged
         // WriteException
         //********************************************
 
+        /// <summary>
+        /// Prints an exception.
+        /// </summary>
+        /// <param name="exception">The exception to print.</param>
         public void WriteException(Exception exception)
         {
             WriteException(exception, false, "", false);
         }
-
+        
+        /// <summary>
+        /// Prints an exception, optionally throwing the same exception.
+        /// </summary>
+        /// <param name="exception">The exception to print</param>
+        /// <param name="throwException">A boolean value indicating if this method should throw the exception.</param>
         public void WriteException(Exception exception, bool throwException)
         {
             WriteException(exception, false, "", false);
         }
-
+        
+        /// <summary>
+        /// Prints an exception with the specified tag, optionally throwing the same exception.
+        /// </summary>
+        /// <param name="exception">The exception to print</param>
+        /// <param name="throwException">A boolean value indicating if this method should throw the exception.</param>
+        /// <param name="tag">The tag to print with.</param>
         public void WriteException(Exception exception, bool throwException, string tag)
         {
             WriteException(exception, throwException, tag, false);
         }
-
+        
+        /// <summary>
+        /// Prints an exception with the specified tag, optionally throwing the same exception and also optionally printing the call stack.
+        /// </summary>
+        /// <param name="exception">The exception to print</param>
+        /// <param name="throwException">A boolean value indicating if this method should throw the exception.</param>
+        /// <param name="tag">The tag to print with.</param>
         public void WriteException(Exception exception, bool throwException, string tag, bool printStack)
         {
             var builder = new StringBuilder();
@@ -754,6 +721,30 @@ namespace WaterLogged
             if (throwException)
             {
                 throw exception;
+            }
+        }
+
+
+        //********************************************
+        // Internals
+        //********************************************
+
+        internal void PushMessage(string message, string tag)
+        {
+            lock (_listeners)
+            {
+                foreach (var listenerKeyValue in _listeners)
+                {
+                    if (listenerKeyValue.Value.Enabled && listenerKeyValue.Value.Filter.Validate(message, tag))
+                    {
+                        if(Formatter != null && listenerKeyValue.Value.FormatterArgs.Count > 0)
+                        {
+                            listenerKeyValue.Value.Write(Formatter.Transform(this, message, tag, listenerKeyValue.Value.FormatterArgs), tag);
+                            continue;
+                        }
+                        listenerKeyValue.Value.Write(message, tag);
+                    }
+                }
             }
         }
 

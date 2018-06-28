@@ -1,5 +1,5 @@
 # TODO:
-- [ ] Multi-threaded writing
+- [x] Multi-threaded writing
 - [ ] Cleanup
     - [ ] Log
     - [ ] Listener
