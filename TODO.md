@@ -7,5 +7,5 @@
     - [x] Formatting
     - [x] Templated Messages
 - [x] Optimize
-- [ ] Rewrite ReadMe
+- [x] Rewrite ReadMe
 - [ ] Maybe write a github wiki.
