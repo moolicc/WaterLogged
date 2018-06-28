@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterLogged", "WaterLogged\WaterLogged.csproj", "{20462DF8-CF99-47D2-A992-96E82E458171}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged", "WaterLogged\WaterLogged.csproj", "{20462DF8-CF99-47D2-A992-96E82E458171}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterLogged.Serialization", "WaterLogged.Serialization\WaterLogged.Serialization.csproj", "{5A085188-4406-4980-B783-EDD948135DDA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Serialization", "WaterLogged.Serialization\WaterLogged.Serialization.csproj", "{5A085188-4406-4980-B783-EDD948135DDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterLogged.Serialization.Json", "WaterLogged.Serialization.Json\WaterLogged.Serialization.Json.csproj", "{4D439184-2926-4E24-8825-F2A96BA079D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WaterLogged.Serialization.Json", "WaterLogged.Serialization.Json\WaterLogged.Serialization.Json.csproj", "{4D439184-2926-4E24-8825-F2A96BA079D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
