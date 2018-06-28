@@ -1,6 +1,6 @@
 # TODO:
 - [x] Multi-threaded writing
-- [ ] Cleanup
+- [x] Cleanup
     - [x] Log
     - [x] Listener
     - [x] Filtering
