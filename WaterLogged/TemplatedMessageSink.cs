@@ -25,11 +25,6 @@ namespace WaterLogged
         }
 
         /// <summary>
-        /// Gets the name of this TemplatedMessageSink.
-        /// </summary>
-        public string Name { get; internal set; }
-
-        /// <summary>
         /// Gets the <see cref="Log"/> that owns this TemplatedMessageSink.
         /// </summary>
         public Log Log { get; internal set; }
@@ -40,19 +35,6 @@ namespace WaterLogged
         {
             Enabled = true;
             FilterManager = new FilterManager();
-        }
-
-        /// <summary>
-        /// Sets the name of this TemplatedMessageSink.
-        /// </summary>
-        /// <param name="newName">The new name to give this TemplatedMessageSink.</param>
-        public void SetName(string newName)
-        {
-            if (Log != null)
-            {
-                Log.ChangeSinkName(Name, newName);
-            }
-            Name = newName;
         }
 
         /// <summary>

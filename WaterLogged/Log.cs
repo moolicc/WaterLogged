@@ -43,16 +43,16 @@ namespace WaterLogged
         /// <summary>
         /// Gets an array of <see cref="Listeners"/>.
         /// </summary>
-        public Listener[] Listeners => _listeners.Values.ToArray();
+        public Listener[] Listeners => _listeners.ToArray();
 
         /// <summary>
         /// Gets an array of <see cref="TemplatedMessageSink"/>.
         /// </summary>
-        public TemplatedMessageSink[] Sinks => _sinks.Values.ToArray();
+        public TemplatedMessageSink[] Sinks => _sinks.ToArray();
         
         private FilterManager _filterManager;
-        private Dictionary<string, Listener> _listeners;
-        private Dictionary<string, TemplatedMessageSink> _sinks;
+        private List<Listener> _listeners;
+        private List<TemplatedMessageSink> _sinks;
 
         /// <summary>
         /// Instantiates an instance of <see cref="Log"/> with a default name.
@@ -68,8 +68,8 @@ namespace WaterLogged
         /// <param name="name">The name of the Log.</param>
         public Log(string name)
         {
-            _listeners = new Dictionary<string, Listener>();
-            _sinks = new Dictionary<string, TemplatedMessageSink>();
+            _listeners = new List<Listener>();
+            _sinks = new List<TemplatedMessageSink>();
 
             Name = name;
             FilterManager = new FilterManager();
@@ -89,60 +89,32 @@ namespace WaterLogged
             {
                 throw new InvalidOperationException("A listener may only be bound to one log at a time.");
             }
-
-            if (string.IsNullOrWhiteSpace(listener.Name))
-            {
-                listener.Name = DateTime.Now.Ticks.ToString();
-            }
             listener.Log = this;
-            _listeners.Add(listener.Name, listener);
+            _listeners.Add(listener);
             return this;
         }
 
         /// <summary>
-        /// Returns a value indicating if this Log contains a <see cref="Listener"/> with the specified name.
+        /// Returns a value indicating if this Log contains the specified <see cref="Listener"/>.
         /// </summary>
-        /// <param name="name">The name of the Listener to search for.</param>
+        /// <param name="listener">The Listener to search for.</param>
         /// <returns></returns>
-        public bool ContainsListener(string name)
+        public bool ContainsListener(Listener listener)
         {
-            return _listeners.ContainsKey(name);
+            return _listeners.Contains(listener);
         }
 
         /// <summary>
-        /// Finds a <see cref="Listener"/> with the specified name and returns it.
+        /// Removes the specified <see cref="Listener"/>.
         /// </summary>
-        /// <param name="name">The name of the Listener.</param>
-        public Listener GetListener(string name)
+        /// <param name="listener">The listener to remove.</param>
+        public Log RemoveListener(Listener listener)
         {
-            return _listeners[name];
-        }
-
-        /// <summary>
-        /// Removes the <see cref="Listener"/> with the specified name from this Log.
-        /// </summary>
-        /// <param name="name">The name of the Listener to remove.</param>
-        public Log RemoveListener(string name)
-        {
-            _listeners[name].Log = null;
-            _listeners.Remove(name);
+            listener.Log = null;
+            _listeners.Remove(listener);
             return this;
         }
-
-        /// <summary>
-        /// Changes a <see cref="Listener"/>'s name.
-        /// </summary>
-        /// <param name="oldName">The name of the Listener whose name to change.</param>
-        /// <param name="newName">The new name of the Listener.</param>
-        public Log ChangeListenerName(string oldName, string newName)
-        {
-            var oldListener = _listeners[oldName];
-            oldListener.Name = newName;
-            _listeners.Add(newName, oldListener);
-            _listeners.Remove(oldName);
-            return this;
-        }
-
+        
 
         /// <summary>
         /// Adds a <see cref="TemplatedMessageSink"/> to this Log.
@@ -154,57 +126,28 @@ namespace WaterLogged
             {
                 throw new InvalidOperationException("A template message sink may only be bound to one log at a time.");
             }
-
-            if (string.IsNullOrWhiteSpace(sink.Name))
-            {
-                sink.Name = DateTime.Now.Ticks.ToString();
-            }
             sink.Log = this;
-            _sinks.Add(sink.Name, sink);
             return this;
         }
 
         /// <summary>
-        /// Returns a value indicating if this Log contains a <see cref="TemplatedMessageSink"/> with the specified name.
+        /// Returns a value indicating if this Log contains the specified <see cref="TemplatedMessageSink"/>.
         /// </summary>
-        /// <param name="name">The name of the TemplatedMessageSink to search for.</param>
+        /// <param name="sink">The TemplatedMessageSink to search for.</param>
         /// <returns></returns>
-        public bool ContainsSink(string name)
+        public bool ContainsSink(TemplatedMessageSink sink)
         {
-            return _sinks.ContainsKey(name);
+            return _sinks.Contains(sink);
         }
 
         /// <summary>
-        /// Finds a <see cref="TemplatedMessageSink"/> with the specified name and returns it.
+        /// Removes the specified <see cref="TemplatedMessageSink"/>.
         /// </summary>
-        /// <param name="name">The name of the TemplatedMessageSink.</param>
-        public TemplatedMessageSink GetSink(string name)
+        /// <param name="sink">The TemplatedMessageSink to remove.</param>
+        public Log RemoveSink(TemplatedMessageSink sink)
         {
-            return _sinks[name];
-        }
-
-        /// <summary>
-        /// Removes the <see cref="TemplatedMessageSink"/> with the specified name from this Log.
-        /// </summary>
-        /// <param name="name">The name of the TemplatedMessageSink to remove.</param>
-        public Log RemoveSink(string name)
-        {
-            _sinks[name].Log = null;
-            _sinks.Remove(name);
-            return this;
-        }
-
-        /// <summary>
-        /// Changes a <see cref="TemplatedMessageSink"/>'s name.
-        /// </summary>
-        /// <param name="oldName">The name of the TemplatedMessageSink whose name to change.</param>
-        /// <param name="newName">The new name of the TemplatedMessageSink.</param>
-        public Log ChangeSinkName(string oldName, string newName)
-        {
-            var oldSink = _sinks[oldName];
-            oldSink.Name = newName;
-            _sinks.Add(newName, oldSink);
-            _sinks.Remove(oldName);
+            sink.Log = null;
+            _sinks.Remove(sink);
             return this;
         }
 
@@ -665,14 +608,12 @@ namespace WaterLogged
             {
                 return;
             }
-            lock (_sinks)
+            //We iterate over a copy of the collection for semi-thread safety.
+            foreach (var sink in _sinks.ToArray())
             {
-                foreach (var sink in _sinks.Values)
+                if (sink.Enabled && sink.FilterManager.ValidateTemplated(message, tag))
                 {
-                    if (sink.Enabled && sink.FilterManager.ValidateTemplated(message, tag))
-                    {
-                        sink.ProcessMessage(message, tag);
-                    }
+                    sink.ProcessMessage(message, tag);
                 }
             }
         }
@@ -742,19 +683,17 @@ namespace WaterLogged
 
         internal void PushMessage(string message, string tag)
         {
-            lock (_listeners)
+            //We iterate over a copy of the collection for semi-thread safety.
+            foreach (var listener in _listeners.ToArray())
             {
-                foreach (var listener in _listeners.Values)
+                if (listener.Enabled && listener.FilterManager.Validate(message, tag))
                 {
-                    if (listener.Enabled && listener.FilterManager.Validate(message, tag))
+                    if(Formatter != null && listener.FormatterArgs.Count > 0)
                     {
-                        if(Formatter != null && listener.FormatterArgs.Count > 0)
-                        {
-                            listener.Write(Formatter.Transform(this, message, tag, listener.FormatterArgs), tag);
-                            continue;
-                        }
-                        listener.Write(message, tag);
+                        listener.Write(Formatter.Transform(this, message, tag, listener.FormatterArgs), tag);
+                        continue;
                     }
+                    listener.Write(message, tag);
                 }
             }
         }

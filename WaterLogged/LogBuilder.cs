@@ -42,18 +42,16 @@ namespace WaterLogged
             _globalPrimary = false;
         }
 
-        public LogBuilder WithListener(Listener listener, string name = "")
+        public LogBuilder WithListener(Listener listener)
         {
-            listener.Name = name;
             _listeners.Add(listener);
             LastListener = listener;
             Context = Contexts.Listener;
             return this;
         }
 
-        public LogBuilder WithSink(TemplatedMessageSink sink, string name = "")
+        public LogBuilder WithSink(TemplatedMessageSink sink)
         {
-            sink.Name = name;
             _messageSinks.Add(sink);
             LastSink = sink;
             Context = Contexts.Sink;
@@ -94,12 +92,6 @@ namespace WaterLogged
             {
                 case Contexts.Log:
                     _logName = name;
-                    break;
-                case Contexts.Listener:
-                    LastListener.Name = name;
-                    break;
-                case Contexts.Sink:
-                    LastSink.Name = name;
                     break;
             }
             return this;

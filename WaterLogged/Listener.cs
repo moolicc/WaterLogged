@@ -30,11 +30,6 @@ namespace WaterLogged
         public Log Log { get; internal set; }
 
         /// <summary>
-        /// Gets the name of this Listener.
-        /// </summary>
-        public string Name { get; internal set; }
-
-        /// <summary>
         /// Gets a <see cref="Dictionary{TKey,TValue}"/> which holds arguments to pass to the log's formatter.
         /// </summary>
         public Dictionary<string, string> FormatterArgs { get; private set; }
@@ -46,19 +41,6 @@ namespace WaterLogged
             Enabled = true;
             FilterManager = new FilterManager();
             FormatterArgs = new Dictionary<string, string>();
-        }
-
-        /// <summary>
-        /// Sets the name of this Listener.
-        /// </summary>
-        /// <param name="newName">The new name to give this Listener.</param>
-        public void SetName(string newName)
-        {
-            if (Log != null)
-            {
-                Log.ChangeListenerName(Name, newName);
-            }
-            Name = newName;
         }
 
         /// <summary>
