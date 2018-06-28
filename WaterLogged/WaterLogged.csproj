@@ -8,8 +8,4 @@
     <PackageReference Include="CoreCLR-NCalc" Version="2.1.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Listeners\" />
-  </ItemGroup>
-
 </Project>
