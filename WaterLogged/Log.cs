@@ -15,22 +15,16 @@ namespace WaterLogged
         /// Gets the name of this log.
         /// </summary>
         public string Name { get; private set; }
+
         /// <summary>
         /// Gets or sets a value indicating if this <see cref="Log"/> is enabled.
         /// </summary>
         public bool Enabled { get; set; }
+
         /// <summary>
         /// Gets or sets the formatter to pass messages through.
         /// </summary>
         public Formatter Formatter { get; set; }
-        /// <summary>
-        /// Gets an array of <see cref="Listeners"/>.
-        /// </summary>
-        public Listener[] Listeners { get { return _listeners.Values.ToArray(); } }
-        /// <summary>
-        /// Gets an array of <see cref="TemplatedMessageSink"/>.
-        /// </summary>
-        public TemplatedMessageSink[] Sinks { get { return _sinks.Values.ToArray(); } }
 
         /// <summary>
         /// Gets or sets a filter to use for all logging messages.
@@ -41,6 +35,16 @@ namespace WaterLogged
         /// Gets or sets a tag to use when logging messages and no tag is specified.
         /// </summary>
         public string DefaultTag { get; set; }
+
+        /// <summary>
+        /// Gets an array of <see cref="Listeners"/>.
+        /// </summary>
+        public Listener[] Listeners => _listeners.Values.ToArray();
+
+        /// <summary>
+        /// Gets an array of <see cref="TemplatedMessageSink"/>.
+        /// </summary>
+        public TemplatedMessageSink[] Sinks => _sinks.Values.ToArray();
 
         private Dictionary<string, Listener> _listeners;
         private Dictionary<string, TemplatedMessageSink> _sinks;
@@ -128,6 +132,7 @@ namespace WaterLogged
         public Log ChangeListenerName(string oldName, string newName)
         {
             var oldListener = _listeners[oldName];
+            oldListener.Name = newName;
             _listeners.Add(newName, oldListener);
             _listeners.Remove(oldName);
             return this;
@@ -192,6 +197,7 @@ namespace WaterLogged
         public Log ChangeSinkName(string oldName, string newName)
         {
             var oldSink = _sinks[oldName];
+            oldSink.Name = newName;
             _sinks.Add(newName, oldSink);
             _sinks.Remove(oldName);
             return this;
@@ -656,11 +662,11 @@ namespace WaterLogged
             }
             lock (_sinks)
             {
-                foreach (var sinkKeyValue in _sinks)
+                foreach (var sink in _sinks.Values)
                 {
-                    if (sinkKeyValue.Value.Enabled && sinkKeyValue.Value.Filter.ValidateTemplated(message, tag))
+                    if (sink.Enabled && sink.Filter.ValidateTemplated(message, tag))
                     {
-                        sinkKeyValue.Value.ProcessMessage(message, tag);
+                        sink.ProcessMessage(message, tag);
                     }
                 }
             }
@@ -733,16 +739,16 @@ namespace WaterLogged
         {
             lock (_listeners)
             {
-                foreach (var listenerKeyValue in _listeners)
+                foreach (var listener in _listeners.Values)
                 {
-                    if (listenerKeyValue.Value.Enabled && listenerKeyValue.Value.Filter.Validate(message, tag))
+                    if (listener.Enabled && listener.Filter.Validate(message, tag))
                     {
-                        if(Formatter != null && listenerKeyValue.Value.FormatterArgs.Count > 0)
+                        if(Formatter != null && listener.FormatterArgs.Count > 0)
                         {
-                            listenerKeyValue.Value.Write(Formatter.Transform(this, message, tag, listenerKeyValue.Value.FormatterArgs), tag);
+                            listener.Write(Formatter.Transform(this, message, tag, listener.FormatterArgs), tag);
                             continue;
                         }
-                        listenerKeyValue.Value.Write(message, tag);
+                        listener.Write(message, tag);
                     }
                 }
             }
