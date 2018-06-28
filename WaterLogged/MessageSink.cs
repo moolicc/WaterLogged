@@ -25,10 +25,16 @@ namespace WaterLogged
         }
 
         /// <summary>
+        /// Message sinks don't support formatting. This will throw a <see cref="NotImplementedException"/>.
+        /// </summary>
+        public Dictionary<string, string> FormatterArgs => throw new NotImplementedException("Message sinks don't support formatting.");
+
+        /// <summary>
         /// Gets the <see cref="Log"/> that owns this MessageSink.
         /// </summary>
         public Log Log { get; set; }
-        
+
+
         private FilterManager _filterManager;
 
         protected MessageSink()

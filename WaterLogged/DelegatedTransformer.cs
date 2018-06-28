@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using WaterLogged.Listeners;
+using WaterLogged.Output;
 
 namespace WaterLogged
 {
