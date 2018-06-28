@@ -2,10 +2,10 @@
 - [x] Multi-threaded writing
 - [ ] Cleanup
     - [x] Log
-    - [ ] Listener
-    - [ ] Filtering
-    - [ ] Formatting
-    - [ ] Templated Messages
-- [ ] Optimize
+    - [x] Listener
+    - [x] Filtering
+    - [x] Formatting
+    - [x] Templated Messages
+- [x] Optimize
 - [ ] Rewrite ReadMe
 - [ ] Maybe write a github wiki.
