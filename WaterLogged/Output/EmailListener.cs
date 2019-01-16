@@ -28,7 +28,7 @@ namespace WaterLogged.Output
         /// <summary>
         /// Contruct the email listener with host, port, security, netwrok crednetials, and a list of reciepients
         /// </summary>
-        /// <param name="host">Location of the SMPT Server</param>        
+        /// <param name="host">Location of the SMTP Server</param>        
         /// <param name="ssl">Use an SSL connection</param>
         /// <param name="userName">user name for netwrok credentials</param>
         /// <param name="userPass">Password for network credentials</param>
