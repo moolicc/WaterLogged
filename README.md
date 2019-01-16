@@ -56,7 +56,7 @@ The current implementations are as follow:
   * StandardOutListener - Outputs to standard-out. It can optionally output in different colors based on tags.
   * FileOut - Appends output to a file.
   * TCPClientOut - Writes messages to a TCP client socket.
-  * EmailOut - Outputs through SMPT - Thanks to [Ben Matthews](https://github.com/BenTMatthews)
+  * EmailOut - Outputs through SMTP - Thanks to [Ben Matthews](https://github.com/BenTMatthews)
 
 
 ## MessageSinks
