@@ -10,7 +10,7 @@ namespace WaterLogged
     /// <summary>
     /// Handles multithreaded log writing.
     /// </summary>
-    public static class LogPool
+    public static class LogBatch
     {
         /// <summary>
         /// Gets or sets a value representing the interval at which the pool should push out messages.
@@ -56,7 +56,7 @@ namespace WaterLogged
         private static ConcurrentQueue<StagedMessage> _staged;
         private static ConcurrentQueue<StagedTemplatedMessage> _stagedTemplated;
 
-        static LogPool()
+        static LogBatch()
         {
             PushDelay = 100;
             PushConsecutiveDelay = 10;

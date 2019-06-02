@@ -405,7 +405,7 @@ namespace WaterLogged
                 return;
             }
 
-            if(LogPool.StageMessage(this, formattedMessage, tag))
+            if(LogBatch.StageMessage(this, formattedMessage, tag))
             {
                 return;
             }
@@ -513,7 +513,7 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             var message = TemplateProcessor.BuildNamedMessage(template, holeValues);
-            if(LogPool.StageMessage(this, message, tag))
+            if(LogBatch.StageMessage(this, message, tag))
             {
                 return;
             }
@@ -537,7 +537,7 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             var message = TemplateProcessor.BuildMessage(template, holeValues);
-            if(LogPool.StageMessage(this, message, tag))
+            if(LogBatch.StageMessage(this, message, tag))
             {
                 return;
             }
@@ -561,7 +561,7 @@ namespace WaterLogged
                 template = Formatter.Transform(template, this, tag, new Dictionary<string, string>());
             }
             var message = TemplateProcessor.BuildParentMessage(template, parentObject);
-            if(LogPool.StageMessage(this, message, tag))
+            if(LogBatch.StageMessage(this, message, tag))
             {
                 return;
             }
@@ -586,7 +586,7 @@ namespace WaterLogged
             }
             
             var message = TemplateProcessor.BuildParentMessage(template, parentType);
-            if(LogPool.StageMessage(this, message, tag))
+            if(LogBatch.StageMessage(this, message, tag))
             {
                 return;
             }
